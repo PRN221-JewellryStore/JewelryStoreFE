@@ -1,4 +1,8 @@
-import { faBars, faTimes, faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faSearch,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
@@ -45,7 +49,7 @@ const Header = () => {
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/home">
             Home
           </Link>
         </NavbarItem>
@@ -55,7 +59,7 @@ const Header = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/about">
             About
           </Link>
         </NavbarItem>
@@ -89,7 +93,8 @@ const Header = () => {
               className="text-gray-500 focus:outline-none"
               onClick={() => setIsSearchOpen(true)}
             >
-              <FontAwesomeIcon icon={faSearch} className="text-gray-500" /> {/* Đổi màu xám cho biểu tượng tìm kiếm */}
+              <FontAwesomeIcon icon={faSearch} className="text-gray-500" />{" "}
+              {/* Đổi màu xám cho biểu tượng tìm kiếm */}
             </button>
           )}
         </NavbarItem>
@@ -97,12 +102,13 @@ const Header = () => {
         {/* Cart */}
         <NavbarItem>
           <Link href="#">
-            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" /> {/* Đổi màu xám cho biểu tượng giỏ hàng */}
+            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" />{" "}
+            {/* Đổi màu xám cho biểu tượng giỏ hàng */}
           </Link>
         </NavbarItem>
 
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
+          <Link href="/login">Login</Link>
         </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">
