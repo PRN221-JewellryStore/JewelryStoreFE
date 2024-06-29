@@ -1,3 +1,5 @@
+import { faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Avatar,
   BreadcrumbItem,
@@ -21,11 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NavBar from "src/components/Header/Navbar";
-import Sidebar from "src/components/Sidebar/Sidebar";
 import React from "react";
+import Sidebar from "src/components/Sidebar/Sidebar";
 
 const UserManage = () => {
   const users = [
@@ -134,7 +133,6 @@ const UserManage = () => {
         <Sidebar />
       </div>
       <div className="w-5/6">
-        <NavBar />
         <div className="w-full mt-4">
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">

@@ -1,3 +1,5 @@
+import { faAdd, faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -23,11 +25,9 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { faAdd, faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import NavBar from "src/components/Header/Navbar";
 import Sidebar from "src/components/Sidebar/Sidebar";
-import React from "react";
 
 const JewelryManage = () => {
   const Jewelries = [
