@@ -6,9 +6,7 @@ const HomePage = () => {
     <main className="home-page">
       <Banner />
       <Slide />
-      <ProductList />
-      <ProductList />
-      <ProductList />
+      {/* <ProductList /> */}
     </main>
   );
 };
