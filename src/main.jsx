@@ -9,6 +9,7 @@ import Product from "./components/pages/Product";
 import "./index.css";
 import UserManage from "./components/pages/AdminPage/UserManage";
 import JewelryManage from "./components/pages/AdminPage/JewelryManage";
+import Dashboard from "./components/pages/AdminPage/Dashboard";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="/admin/user-manage" element={<UserManage />} />
         <Route path="/admin/jewelry-manage" element={<JewelryManage />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

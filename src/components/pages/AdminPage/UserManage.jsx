@@ -139,6 +139,9 @@ const UserManage = () => {
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
               <BreadcrumbItem className="text-inherit text-2xl">
+                Admin
+              </BreadcrumbItem>
+              <BreadcrumbItem className="text-inherit text-2xl">
                 Manage
               </BreadcrumbItem>
               <BreadcrumbItem className="text-inherit text-2xl">
@@ -150,7 +153,7 @@ const UserManage = () => {
         <div className="w-full mt-8 p-4">
           <Card className="p-8 relative overflow-visible">
             <CardHeader className="p-0 flex flex-row justify-center">
-              <div className="rounded-md bg-sky-500 w-3/4 p-4 mt-[-4rem]">
+              <div className="rounded-md bg-sky-300 w-4/5 p-4 mt-[-4rem]">
                 <p className="text-center pl-4 text-4xl text-bold">
                   User Management
                 </p>
