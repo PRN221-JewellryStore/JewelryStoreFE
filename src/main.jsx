@@ -13,6 +13,7 @@ import { Provider } from "react-redux";
 import "./index.css";
 import { store } from "./app/store";
 import RegisterPage from "./components/pages/RegisterPage/RegisterPage";
+import { NotFound } from "./components/pages/NotFound/NotFound";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -25,6 +26,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="product" element={<Product />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+
+            <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="/admin/user-manage" element={<UserManage />} />
           <Route path="/admin/jewelry-manage" element={<JewelryManage />} />

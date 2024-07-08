@@ -28,13 +28,7 @@ export const Header = () => {
   const menuItems = [
     "Profile",
     "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
     "My Settings",
-    "Team Settings",
-    "Help & Feedback",
     "Log Out",
   ];
 
@@ -50,19 +44,40 @@ export const Header = () => {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-4 justify-center">
         <NavbarItem>
-          <Link color="foreground" href="/home">
+          <Link
+            className={`text-gray-500 hover:text-primary focus:text-primary ${
+              window.location.pathname === "/home" ? "text-primary" : ""
+            }`}
+            href="/home"
+          >
             Home
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="#" aria-current="page">
-            Category
+          <Link
+            className={`text-gray-500 hover:text-primary focus:text-primary ${
+              window.location.pathname === "/diamond" ? "text-primary" : ""
+            }`}
+            href="/diamond"
+            aria-current={
+              window.location.pathname === "/diamond" ? "page" : undefined
+            }
+          >
+            Diamond
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="/about">
+          <Link
+            className={`text-gray-500 hover:text-primary focus:text-primary ${
+              window.location.pathname === "/about" ? "text-primary" : ""
+            }`}
+            href="/about"
+            aria-current={
+              window.location.pathname === "/about" ? "page" : undefined
+            }
+          >
             About
           </Link>
         </NavbarItem>
