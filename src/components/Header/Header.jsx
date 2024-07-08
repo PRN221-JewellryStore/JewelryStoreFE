@@ -17,10 +17,13 @@ import {
   Input,
 } from "@nextui-org/react";
 import React from "react";
+import { useSelector } from "react-redux";
+import { Avatar } from "../Avatar/Avatar";
 
-const Header = () => {
+export const Header = () => {
+  const accountLoggedIn = useSelector((state) => state.account.loggedIn);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isSearchOpen, setIsSearchOpen] = React.useState(false); // State for search bar
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
 
   const menuItems = [
     "Profile",
@@ -66,7 +69,6 @@ const Header = () => {
       </NavbarContent>
 
       <NavbarContent justify="end" className="flex items-center space-x-4">
-        {/* Search bar */}
         <NavbarItem>
           {isSearchOpen ? (
             <div className="relative">
@@ -76,7 +78,6 @@ const Header = () => {
                 className="border-gray-300 px-2 py-1 focus:outline-none"
                 onKeyPress={(e) => {
                   if (e.key === "Enter") {
-                    // Handle search logic here
                     console.log("Searching for:", e.target.value);
                   }
                 }}
@@ -93,28 +94,33 @@ const Header = () => {
               className="text-gray-500 focus:outline-none"
               onClick={() => setIsSearchOpen(true)}
             >
-              <FontAwesomeIcon icon={faSearch} className="text-gray-500" />{" "}
-              {/* Đổi màu xám cho biểu tượng tìm kiếm */}
+              <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
             </button>
           )}
         </NavbarItem>
 
-        {/* Cart */}
         <NavbarItem>
           <Link href="#">
-            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" />{" "}
-            {/* Đổi màu xám cho biểu tượng giỏ hàng */}
+            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" />
           </Link>
         </NavbarItem>
-
-        <NavbarItem className="hidden lg:flex">
-          <Link href="/login">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {accountLoggedIn.username ? (
+          <Avatar
+            imageURL="/src/assets/image/client.jpg"
+            name={accountLoggedIn.username}
+          />
+        ) : (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Link href="/login">Login</Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Button as={Link} color="primary" href="/register" variant="flat">
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
 
       <NavbarMenu>

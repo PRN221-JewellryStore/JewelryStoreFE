@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       src: "/src",
+      "axios/lib/adapters": "axios/lib/adapters/https",
     },
   },
 });
