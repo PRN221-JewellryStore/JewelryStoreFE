@@ -1,5 +1,5 @@
 import React from "react";
-import {Banner, ProductList, Slide} from "src/components"
+import { Banner, Slide } from "src/components";
 
 const HomePage = () => {
   return (
@@ -10,5 +10,4 @@ const HomePage = () => {
     </main>
   );
 };
-
 export default HomePage;

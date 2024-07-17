@@ -16,9 +16,12 @@ export const AccountSlice = createSlice({
     setLoggedInAccount(state, action) {
       state.loggedIn = action.payload;
     },
+    logout(state) {
+      state.loggedIn = initialState.loggedIn;
+    },
   },
 });
 
-export const { setLoggedInAccount } = AccountSlice.actions;
+export const { setLoggedInAccount, logout } = AccountSlice.actions;
 const accountReducer = AccountSlice.reducer;
 export { accountReducer };

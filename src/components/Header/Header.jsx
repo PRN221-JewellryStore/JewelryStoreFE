@@ -1,94 +1,114 @@
 import {
-  faTimes,
   faSearch,
   faShoppingCart,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
   Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
-  Input,
+  NavbarItem
 } from "@nextui-org/react";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "src/app/feature/account/AccountSlice";
 import { Avatar } from "../Avatar/Avatar";
 
 export const Header = () => {
   const accountLoggedIn = useSelector((state) => state.account.loggedIn);
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logout());
+    navigate("/home");
+  };
 
   const menuItems = [
-    "Profile",
-    "Dashboard",
-    "My Settings",
-    "Log Out",
+    { key: "account", label: "Account" },
+    { key: "logout", label: "Log Out" },
   ];
 
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.id = "hs-script-loader";
+    script.async = true;
+    script.defer = true;
+    script.src = "//js-na1.hs-scripts.com/46797835.js";
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="2xl">
-      <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
-        />
+    <Navbar maxWidth="full">
+      <NavbarContent className="flex justify-between items-center space-x-72">
         <NavbarBrand>
           <p className="font-bold text-inherit text-2xl">Diamond Shop</p>
         </NavbarBrand>
-      </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4 justify-center">
-        <NavbarItem>
-          <Link
-            className={`text-gray-500 hover:text-primary focus:text-primary ${
-              window.location.pathname === "/home" ? "text-primary" : ""
-            }`}
-            href="/home"
-          >
-            Home
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link
-            className={`text-gray-500 hover:text-primary focus:text-primary ${
-              window.location.pathname === "/diamond" ? "text-primary" : ""
-            }`}
-            href="/diamond"
-            aria-current={
-              window.location.pathname === "/diamond" ? "page" : undefined
-            }
-          >
-            Diamond
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link
-            className={`text-gray-500 hover:text-primary focus:text-primary ${
-              window.location.pathname === "/about" ? "text-primary" : ""
-            }`}
-            href="/about"
-            aria-current={
-              window.location.pathname === "/about" ? "page" : undefined
-            }
-          >
-            About
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
+        <NavbarContent className="hidden lg:flex gap-4 justify-center">
+          <NavbarItem>
+            <Link
+              className={`text-gray-500 hover:text-primary focus:text-primary ${
+                window.location.pathname === "/home" ? "text-primary" : ""
+              }`}
+              href="/home"
+            >
+              Home
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className={`text-gray-500 hover:text-primary focus:text-primary ${
+                window.location.pathname === "/diamond" ? "text-primary" : ""
+              }`}
+              href="/diamond"
+            >
+              Diamond
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className={`text-gray-500 hover:text-primary focus:text-primary ${
+                window.location.pathname === "/about" ? "text-primary" : ""
+              }`}
+              href="/about"
+            >
+              About
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
 
-      <NavbarContent justify="end" className="flex items-center space-x-4">
-        <NavbarItem>
+        <NavbarContent className="flex items-center space-x-4">
           {isSearchOpen ? (
             <div className="relative">
               <Input
-                placeholder="Type to search..."
+                placeholder="Type to search"
                 size="sm"
                 className="border-gray-300 px-2 py-1 focus:outline-none"
                 onKeyPress={(e) => {
@@ -112,54 +132,73 @@ export const Header = () => {
               <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
             </button>
           )}
-        </NavbarItem>
 
-        <NavbarItem>
-          <Link href="#">
-            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" />
-          </Link>
-        </NavbarItem>
-        {accountLoggedIn.username ? (
-          <Avatar
-            imageURL="/src/assets/image/client.jpg"
-            name={accountLoggedIn.username}
-          />
-        ) : (
-          <>
-            <NavbarItem className="hidden lg:flex">
-              <Link href="/login">Login</Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Button as={Link} color="primary" href="/register" variant="flat">
-                Sign Up
-              </Button>
-            </NavbarItem>
-          </>
-        )}
-      </NavbarContent>
-
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              className="w-full"
-              href="#"
-              size="lg"
-            >
-              {item}
+          <NavbarItem>
+            <Link href="#">
+              <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" />
             </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
+          </NavbarItem>
+
+          {accountLoggedIn.username ? (
+            <div
+              className="relative"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Avatar
+                imageURL="/src/assets/image/client.jpg"
+                name={accountLoggedIn.username}
+                className="cursor-pointer m"
+              />
+
+              {isDropdownOpen && (
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <div className="absolute top-full right-0 z-10">
+                      <div className="bg-white shadow-lg border border-gray-200 w-48">
+                        <DropdownMenu aria-label="User menu" variant="flat">
+                          {menuItems.map((item) => (
+                            <DropdownItem
+                              key={item.key}
+                              className="w-full"
+                              color={item.key === "logout" ? "danger" : "default"}
+                              onClick={
+                                item.key === "logout" ? handleLogout : undefined
+                              }
+                            >
+                              <Link
+                                href={item.key === "account" ? "/account" : "#"}
+                              >
+                                {item.label}
+                              </Link>
+                            </DropdownItem>
+                          ))}
+                        </DropdownMenu>
+                      </div>
+                    </div>
+                  </DropdownTrigger>
+                </Dropdown>
+              )}
+            </div>
+          ) : (
+            <>
+              <NavbarItem className="hidden lg:flex">
+                <Link href="/login">Login</Link>
+              </NavbarItem>
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  color="primary"
+                  href="/register"
+                  variant="flat"
+                >
+                  Sign Up
+                </Button>
+              </NavbarItem>
+            </>
+          )}
+        </NavbarContent>
+      </NavbarContent>
     </Navbar>
   );
 };
-
-export default Header;
