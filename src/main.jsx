@@ -6,34 +6,41 @@ import Layout from "./components/Layout/Layout";
 import About from "./components/pages/AboutPage/AboutPage";
 import JewelryManage from "./components/pages/AdminPage/JewelryManage";
 import UserManage from "./components/pages/AdminPage/UserManage";
-import Product from "./components/pages/Product";
 import { Provider } from "react-redux";
 import "./index.css";
 import { store } from "./app/store";
 import RegisterPage from "./components/pages/RegisterPage/RegisterPage";
 import { NotFound } from "./components/pages/NotFound/NotFound";
-import HomePage from "./components/pages/HomePage/HomePage";
 import LoginPage from "./components/pages/LoginPage/LoginPage";
+import DiamondPage from "./components/pages/DiamondPage/DiamondPage";
+import HomePage from "./components/pages/HomePage/HomePage";
+import { ProductDetailPage } from "./components/pages/ProductDetailPage";
+import { CartPage } from "./components/pages/CartPage";
+import { ShopCategoryPage } from "./components/pages/ShopCategoryPage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="home" index element={<HomePage />} />
-            <Route path="about" element={<About />} />
-            <Route path="product" element={<Product />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="about" element={<About />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route
+            path="product-detail/:productId"
+            element={<ProductDetailPage />}
+          />
+          <Route path="shop-category" element={<ShopCategoryPage />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="diamond" element={<DiamondPage />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Route>
-          <Route path="/admin/user-manage" element={<UserManage />} />
-          <Route path="/admin/jewelry-manage" element={<JewelryManage />} />
-        </Routes>
-      </BrowserRouter>
-    </React.StrictMode>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route path="/admin/user-manage" element={<UserManage />} />
+        <Route path="/admin/jewelry-manage" element={<JewelryManage />} />
+      </Routes>
+    </BrowserRouter>
   </Provider>
 );

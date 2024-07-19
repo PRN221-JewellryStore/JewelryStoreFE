@@ -25,7 +25,7 @@ export const LoginPage = () => {
     try {
       const response = await axiosClient.post("/User/login", formData);
       const { token, ...account } = response;
-      localStorage.setItem("token", token); // Ensure token is saved
+      sessionStorage.setItem("token", token); // Ensure token is saved
       dispatch(setLoggedInAccount(account));
       navigate("/home");
       toast.success("Login success!");

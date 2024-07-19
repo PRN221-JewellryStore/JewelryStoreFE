@@ -1,6 +1,6 @@
 import React from "react";
 
-const Slide = () => {
+export const Slide = () => {
   return (
     <div className="relative w-full overflow-hidden bg-black">
       <div className="flex space-x-4 p-4">
@@ -21,4 +21,3 @@ const Slide = () => {
   );
 };
 
-export default Slide;

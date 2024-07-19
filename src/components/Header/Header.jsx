@@ -15,7 +15,7 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem
+  NavbarItem,
 } from "@nextui-org/react";
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,8 +28,13 @@ export const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const carts = useSelector((state) => state.cart.carts);
 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
+  const gotoCartPage = () => {
+    navigate("/cart")
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -134,9 +139,8 @@ export const Header = () => {
           )}
 
           <NavbarItem>
-            <Link href="#">
-              <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" />
-            </Link>
+            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-500" onClick={gotoCartPage} />{" "}
+            {Object.keys(carts).length}
           </NavbarItem>
 
           {accountLoggedIn.username ? (
@@ -161,7 +165,9 @@ export const Header = () => {
                             <DropdownItem
                               key={item.key}
                               className="w-full"
-                              color={item.key === "logout" ? "danger" : "default"}
+                              color={
+                                item.key === "logout" ? "danger" : "default"
+                              }
                               onClick={
                                 item.key === "logout" ? handleLogout : undefined
                               }

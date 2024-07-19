@@ -1,7 +1,7 @@
 import { Container, Row, Col } from 'reactstrap';
 import React from 'react';
 
-const Banner = () => {
+export const Banner = () => {
   return (
     <div className="relative bg-center text-white py-20" style={{ backgroundImage: 'url(src/assets/image/slider-bg.jpg)'}}>
       <Container>
@@ -26,5 +26,3 @@ const Banner = () => {
     </div>
   );
 };
-
-export default Banner;
