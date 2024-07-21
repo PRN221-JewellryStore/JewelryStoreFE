@@ -67,6 +67,44 @@ const Sidebar = () => {
             </div>
           </Link>
         </li>
+        <li className="w-full">
+          <Link className="menu-title w-full" href="/admin/category-manage">
+            <div
+              className={`h-16 w-full flex items-center pl-4 text-inherit text-xl rounded-lg ${
+                pathname === "/admin/category-manage" ? "bg-black" : ""
+              }`}
+            >
+              <b
+                className={
+                  pathname === "/admin/category-manage"
+                    ? "text-white"
+                    : "text-black"
+                }
+              >
+                Category Management
+              </b>
+            </div>
+          </Link>
+        </li>
+        <li className="w-full">
+          <Link className="menu-title w-full" href="/admin/promotion-manage">
+            <div
+              className={`h-16 w-full flex items-center pl-4 text-inherit text-xl rounded-lg ${
+                pathname === "/admin/promotion-manage" ? "bg-black" : ""
+              }`}
+            >
+              <b
+                className={
+                  pathname === "/admin/promotion-manage"
+                    ? "text-white"
+                    : "text-black"
+                }
+              >
+                Promotion Management
+              </b>
+            </div>
+          </Link>
+        </li>
       </ul>
     </nav>
   );
