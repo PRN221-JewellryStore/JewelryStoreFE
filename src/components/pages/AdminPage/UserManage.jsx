@@ -27,6 +27,7 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { deleteUser, getAllUsers, updateUser } from "src/api/userApi";
+import NavBar from "src/components/Header/Navbar";
 import Sidebar from "src/components/Sidebar/Sidebar";
 
 const UserManage = () => {
@@ -124,6 +125,7 @@ const UserManage = () => {
         <Sidebar />
       </div>
       <div className="w-5/6">
+        <NavBar />
         <div className="w-full mt-4">
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
@@ -161,66 +163,70 @@ const UserManage = () => {
                   </TableBody>
                 ) : (
                   <TableBody>
-                    {users.map((user, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="text-2xl">
-                          {user.fullName}
-                        </TableCell>
-                        <TableCell className="text-2xl">{user.email}</TableCell>
-                        <TableCell className="text-2xl">
-                          {user.phoneNumber}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {user.address}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          <Chip
-                            color={
-                              user.roleID == 1
-                                ? "success"
+                    {users
+                      .slice((page - 1) * 8, page * 8)
+                      .map((user, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="text-2xl">
+                            {user.fullName}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {user.email}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {user.phoneNumber}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {user.address}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            <Chip
+                              color={
+                                user.roleID == 1
+                                  ? "success"
+                                  : user.roleID == 2
+                                  ? "default"
+                                  : user.roleID == 3
+                                  ? "primary"
+                                  : "secondary"
+                              }
+                            >
+                              {user.roleID == 1
+                                ? "Admin"
                                 : user.roleID == 2
-                                ? "default"
+                                ? "Customer"
                                 : user.roleID == 3
-                                ? "primary"
-                                : "secondary"
-                            }
-                          >
-                            {user.roleID == 1
-                              ? "Admin"
-                              : user.roleID == 2
-                              ? "Customer"
-                              : user.roleID == 3
-                              ? "Manager"
-                              : "Staff"}
-                          </Chip>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            className="w-1/6 bg-yellow-500 text-white"
-                            aria-label="edit"
-                            onClick={() => modalOpen(user)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faEdit}
-                              className="text-white-500"
-                            />
-                          </Button>
-                          <Button
-                            className="w-1/6 bg-red-500 text-white"
-                            aria-label="remove"
-                            onClick={() => {
-                              setSelectedUser(user.id);
-                              setIsConfirm(true);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faRemove}
-                              className="text-white-500"
-                            />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                                ? "Manager"
+                                : "Staff"}
+                            </Chip>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              className="w-1/6 bg-yellow-500 text-white"
+                              aria-label="edit"
+                              onClick={() => modalOpen(user)}
+                            >
+                              <FontAwesomeIcon
+                                icon={faEdit}
+                                className="text-white-500"
+                              />
+                            </Button>
+                            <Button
+                              className="w-1/6 bg-red-500 text-white"
+                              aria-label="remove"
+                              onClick={() => {
+                                setSelectedUser(user.id);
+                                setIsConfirm(true);
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faRemove}
+                                className="text-white-500"
+                              />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 )}
               </Table>
@@ -228,9 +234,9 @@ const UserManage = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={users.length / 10}
+                total={users.length / 8}
                 initialPage={page}
-                onChange={(event, newPage) => setPage(newPage)}
+                onChange={(newPage) => setPage(newPage)}
               />
             </CardFooter>
           </Card>
