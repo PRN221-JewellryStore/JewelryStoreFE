@@ -105,6 +105,23 @@ const Sidebar = () => {
             </div>
           </Link>
         </li>
+        <li className="w-full">
+          <Link className="menu-title w-full" href="/admin/view-order">
+            <div
+              className={`h-16 w-full flex items-center pl-4 text-inherit text-xl rounded-lg ${
+                pathname === "/admin/view-order" ? "bg-black" : ""
+              }`}
+            >
+              <b
+                className={
+                  pathname === "/admin/view-order" ? "text-white" : "text-black"
+                }
+              >
+                View Order
+              </b>
+            </div>
+          </Link>
+        </li>
       </ul>
     </nav>
   );
