@@ -234,67 +234,69 @@ const JewelryManage = () => {
                   </TableBody>
                 ) : (
                   <TableBody>
-                    {jewelries.map((jewelry) => (
-                      <TableRow key={jewelry.id}>
-                        <TableCell className="text-2xl">
-                          {jewelry.name}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {jewelry.description}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {jewelry.category.name}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {jewelry.weight}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {jewelry.quantity}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {jewelry.cost.toLocaleString("en-US", {
-                            style: "decimal",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}{" "}
-                          VNĐ
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {jewelry.deletedAt == null ? (
-                            <Chip color="success">On-Sell</Chip>
-                          ) : (
-                            <Chip color="danger">Removed</Chip>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            className="w-1/6 bg-yellow-500 text-white"
-                            aria-label="edit"
-                            onClick={() => modalEditOpen(jewelry)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faEdit}
-                              className="text-white-500"
-                            />
-                          </Button>
-                          {jewelry.deletedAt == null && (
+                    {jewelries
+                      .slice((page - 1) * 8, page * 8)
+                      .map((jewelry) => (
+                        <TableRow key={jewelry.id}>
+                          <TableCell className="text-2xl">
+                            {jewelry.name}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.description}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.category.name}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.weight}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.quantity}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.cost.toLocaleString("en-US", {
+                              style: "decimal",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}{" "}
+                            VNĐ
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.deletedAt == null ? (
+                              <Chip color="success">On-Sell</Chip>
+                            ) : (
+                              <Chip color="danger">Removed</Chip>
+                            )}
+                          </TableCell>
+                          <TableCell>
                             <Button
-                              className="w-1/6 bg-red-500 text-white"
-                              aria-label="remove"
-                              onClick={() => {
-                                setIsConfirm(true);
-                                setSelectedProduct(jewelry.id);
-                              }}
+                              className="w-1/6 bg-yellow-500 text-white"
+                              aria-label="edit"
+                              onClick={() => modalEditOpen(jewelry)}
                             >
                               <FontAwesomeIcon
-                                icon={faRemove}
+                                icon={faEdit}
                                 className="text-white-500"
                               />
                             </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                            {jewelry.deletedAt == null && (
+                              <Button
+                                className="w-1/6 bg-red-500 text-white"
+                                aria-label="remove"
+                                onClick={() => {
+                                  setIsConfirm(true);
+                                  setSelectedProduct(jewelry.id);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faRemove}
+                                  className="text-white-500"
+                                />
+                              </Button>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 )}
               </Table>
@@ -302,9 +304,9 @@ const JewelryManage = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={Math.ceil(jewelries.length / 10)}
+                total={Math.ceil(jewelries.length / 8)}
                 initialPage={page}
-                onChange={(event, newPage) => setPage(newPage)}
+                onChange={(newPage) => setPage(newPage)}
               />
             </CardFooter>
           </Card>
