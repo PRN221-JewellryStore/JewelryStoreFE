@@ -42,16 +42,19 @@ export const updateUser = async (
   roleID
 ) => {
   try {
-    const response = await axios.patch(`${baseUrl}/api/User/update/${id}`, {
-      Username: username,
-      Password: password,
-      FullName: fullName,
-      Email: email,
-      PhoneNumber: phoneNumber,
-      Address: address,
-      Point: point,
-      RoleID: roleID,
-    });
+    let newFormData = new FormData();
+    newFormData.append("Username", username);
+    newFormData.append("Password", password);
+    newFormData.append("FullName", fullName);
+    newFormData.append("Email", email);
+    newFormData.append("PhoneNumber", phoneNumber);
+    newFormData.append("Address", address);
+    newFormData.append("Point", 0);
+    newFormData.append("RoleID", roleID);
+    const response = await axios.patch(
+      `${baseUrl}/api/User/update/${id}`,
+      newFormData
+    );
     if (response.status === 200) {
       return response.status;
     }
