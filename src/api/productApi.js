@@ -24,16 +24,21 @@ export const createProduct = async (
   weight,
   quantity,
   description,
+  name,
   categoryID
 ) => {
   try {
-    const response = await axios.post(`${baseUrl}/api/Product/create`, {
-      Cost: cost,
-      Weight: weight,
-      Quantity: quantity,
-      Description: description,
-      CategoryID: categoryID,
-    });
+    let newFormData = new FormData();
+    newFormData.append("Cost", cost);
+    newFormData.append("Weight", weight);
+    newFormData.append("Quantity", quantity);
+    newFormData.append("Description", description);
+    newFormData.append("Name", name);
+    newFormData.append("CategoryID", categoryID);
+    const response = await axios.post(
+      `${baseUrl}/api/Product/create`,
+      newFormData
+    );
     if (response.status === 200) {
       return response.status;
     }
@@ -48,16 +53,21 @@ export const updateProduct = async (
   weight,
   quantity,
   description,
+  name,
   categoryID
 ) => {
   try {
-    const response = await axios.patch(`${baseUrl}/api/Product/update/${id}`, {
-      Cost: cost,
-      Weight: weight,
-      Quantity: quantity,
-      Description: description,
-      CategoryID: categoryID,
-    });
+    let newFormData = new FormData();
+    newFormData.append("Cost", cost);
+    newFormData.append("Weight", weight);
+    newFormData.append("Quantity", quantity);
+    newFormData.append("Description", description);
+    newFormData.append("Name", name);
+    newFormData.append("CategoryID", categoryID);
+    const response = await axios.patch(
+      `${baseUrl}/api/Product/update/${id}`,
+      newFormData
+    );
     if (response.status === 200) {
       return response.status;
     }
