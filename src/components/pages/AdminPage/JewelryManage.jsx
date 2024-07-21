@@ -9,7 +9,6 @@ import {
   CardFooter,
   CardHeader,
   Chip,
-  Image,
   Input,
   Modal,
   ModalBody,
@@ -17,6 +16,8 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination,
+  Select,
+  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -41,6 +42,7 @@ const JewelryManage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [categoryId, setCategoryId] = useState(1);
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [weight, setWeight] = useState(0);
@@ -54,6 +56,10 @@ const JewelryManage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
 
   const fetchData = async () => {
     try {
@@ -82,6 +88,7 @@ const JewelryManage = () => {
           Number(weight),
           Number(quantity),
           description,
+          name,
           Number(categoryId)
         );
         setMess("Add product successfully !!!");
@@ -92,6 +99,8 @@ const JewelryManage = () => {
       }
     } else if (description === "") {
       setErr("Please type description");
+    } else if (name === "") {
+      setErr("Please type name");
     } else if (cost <= 0) {
       setErr("Cost must be large than 0");
     } else if (weight <= 0) {
@@ -109,6 +118,7 @@ const JewelryManage = () => {
     setQuantity(product.quantity);
     setWeight(product.weight);
     setDescription(product.description);
+    setName(product.name);
     setCategoryId(product.categoryID);
   };
 
@@ -120,6 +130,7 @@ const JewelryManage = () => {
     setQuantity(0);
     setWeight(0);
     setDescription("");
+    setName("");
     setCategoryId();
     setErr("");
   };
@@ -133,6 +144,7 @@ const JewelryManage = () => {
           Number(weight),
           Number(quantity),
           description,
+          name,
           Number(categoryId)
         );
         setMess("Edit product successfully !!!");
@@ -143,6 +155,8 @@ const JewelryManage = () => {
       }
     } else if (description === "") {
       setErr("Please type description");
+    } else if (name === "") {
+      setErr("Please type name");
     } else if (cost <= 0) {
       setErr("Cost must be large than 0");
     } else if (weight <= 0) {
@@ -205,8 +219,9 @@ const JewelryManage = () => {
               </Button>
               <Table aria-label="Users Table">
                 <TableHeader>
-                  <TableColumn className="text-2xl">Category</TableColumn>
+                  <TableColumn className="text-2xl">Name</TableColumn>
                   <TableColumn className="text-2xl">Description</TableColumn>
+                  <TableColumn className="text-2xl">Category</TableColumn>
                   <TableColumn className="text-2xl">Weight</TableColumn>
                   <TableColumn className="text-2xl">Quantity</TableColumn>
                   <TableColumn className="text-2xl">Cost</TableColumn>
@@ -222,15 +237,13 @@ const JewelryManage = () => {
                     {jewelries.map((jewelry) => (
                       <TableRow key={jewelry.id}>
                         <TableCell className="text-2xl">
-                          ewrwe
-                          {/* {
-                            categories.filter(
-                              (cate) => (cate.id = jewelry.categoryID)
-                            )[0].name
-                          } */}
+                          {jewelry.name}
                         </TableCell>
                         <TableCell className="text-2xl">
                           {jewelry.description}
+                        </TableCell>
+                        <TableCell className="text-2xl">
+                          {jewelry.category.name}
                         </TableCell>
                         <TableCell className="text-2xl">
                           {jewelry.weight}
@@ -239,7 +252,12 @@ const JewelryManage = () => {
                           {jewelry.quantity}
                         </TableCell>
                         <TableCell className="text-2xl">
-                          {jewelry.cost}
+                          {jewelry.cost.toLocaleString("en-US", {
+                            style: "decimal",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}{" "}
+                          VNĐ
                         </TableCell>
                         <TableCell className="text-2xl">
                           {jewelry.deletedAt == null ? (
@@ -284,7 +302,7 @@ const JewelryManage = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={jewelries.length / 10}
+                total={Math.ceil(jewelries.length / 10)}
                 initialPage={page}
                 onChange={(event, newPage) => setPage(newPage)}
               />
@@ -292,15 +310,15 @@ const JewelryManage = () => {
           </Card>
         </div>
       </div>
-      <Modal size="5xl" isOpen={isOpen} onClose={() => modalClose}>
+      <Modal size="3xl" isOpen={isOpen} onClose={() => modalClose}>
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
               {isEdit ? "Edit Jewelry Information" : "Add Jewelry Information"}
             </ModalHeader>
             <ModalBody>
-              <div className="flex flex-row">
-                <div className="w-2/5 flex justify-center items-start">
+              <div className="flex flex-row justify-center">
+                {/* <div className="w-2/5 flex justify-center items-start">
                   <Image
                     isBlurred
                     width={240}
@@ -308,22 +326,27 @@ const JewelryManage = () => {
                     alt="NextUI Album Cover"
                     className="m-5"
                   />
-                </div>
+                </div> */}
                 <div className="w-3/5">
-                  <select
+                  <Select
                     required
                     label="Jewelry Category"
-                    placeholder="Select a category"
-                    value={categoryId}
+                    defaultSelectedKeys={[String(categoryId)]}
                     onChange={(e) => setCategoryId(e.target.value)}
                     className="w-full p-4"
                   >
                     {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
+                      <SelectItem key={category.id}>{category.name}</SelectItem>
                     ))}
-                  </select>
+                  </Select>
+                  <Input
+                    isRequired
+                    type="text"
+                    label="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full p-4"
+                  />
                   <Input
                     isRequired
                     type="text"

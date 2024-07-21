@@ -1,7 +1,6 @@
 import { faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Avatar,
   BreadcrumbItem,
   Breadcrumbs,
   Button,
@@ -17,6 +16,8 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination,
+  Select,
+  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -95,7 +96,7 @@ const UserManage = () => {
         phone,
         address,
         point,
-        roleID
+        Number(roleID)
       );
       setMess("Update successfull!!");
       modalClose();
@@ -151,7 +152,6 @@ const UserManage = () => {
                   <TableColumn className="text-2xl">Email</TableColumn>
                   <TableColumn className="text-2xl">Phone</TableColumn>
                   <TableColumn className="text-2xl">Address</TableColumn>
-                  <TableColumn className="text-2xl">Point</TableColumn>
                   <TableColumn className="text-2xl">Role</TableColumn>
                   <TableColumn></TableColumn>
                 </TableHeader>
@@ -173,7 +173,6 @@ const UserManage = () => {
                         <TableCell className="text-2xl">
                           {user.address}
                         </TableCell>
-                        <TableCell className="text-2xl">{user.point}</TableCell>
                         <TableCell className="text-2xl">
                           <Chip
                             color={
@@ -237,13 +236,13 @@ const UserManage = () => {
           </Card>
         </div>
       </div>
-      <Modal size="5xl" isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal size="3xl" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">Edit User</ModalHeader>
             <ModalBody>
-              <div className="flex flex-row">
-                <div className="w-2/5 flex justify-center items-start">
+              <div className="flex flex-row justify-center">
+                {/* <div className="w-2/5 flex justify-center items-start">
                   <Avatar
                     isBordered
                     className="transition-transform w-1/2 h-auto"
@@ -251,8 +250,8 @@ const UserManage = () => {
                     size="sm"
                     src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
                   />
-                </div>
-                <div className="w-3/5">
+                </div> */}
+                <div className="w-4/5">
                   <Input
                     isRequired
                     type="text"
@@ -301,26 +300,18 @@ const UserManage = () => {
                     onChange={(e) => setAddress(e.target.value)}
                     className="w-full p-4"
                   />
-                  <Input
-                    isRequired
-                    type="number"
-                    label="Point"
-                    value={point}
-                    onChange={(e) => setPoint(e.target.value)}
-                    className="w-full p-4"
-                  />
-                  <select
+                  <Select
                     required
                     label="Role"
-                    value={roleID}
+                    defaultSelectedKeys={[String(roleID)]}
                     onChange={(e) => setRoleID(e.target.value)}
                     className="w-full p-4"
                   >
-                    <option value={1}>Admin</option>
-                    <option value={3}>Manager</option>
-                    <option value={4}>Staff</option>
-                    <option value={2}>Customer</option>
-                  </select>
+                    <SelectItem key={1}>Admin</SelectItem>
+                    <SelectItem key={3}>Manager</SelectItem>
+                    <SelectItem key={4}>Staff</SelectItem>
+                    <SelectItem key={2}>Customer</SelectItem>
+                  </Select>
                 </div>
               </div>
             </ModalBody>
