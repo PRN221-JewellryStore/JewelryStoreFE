@@ -9,7 +9,6 @@ import {
   CardFooter,
   CardHeader,
   Chip,
-  DatePicker,
   Input,
   Modal,
   ModalBody,
@@ -25,12 +24,17 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { getAllCategories } from "src/api/categoryApi";
+import {
+  createPromotion,
+  getAllPromotions,
+  removePromotion,
+  updatePromotion,
+} from "src/api/promotionApi";
 import NavBar from "src/components/Header/Navbar";
 import Sidebar from "src/components/Sidebar/Sidebar";
 
 const PromotionManagement = () => {
-  const [categories, setCategories] = useState([]);
+  const [promotions, setPromotions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [id, setId] = useState("");
@@ -54,8 +58,8 @@ const PromotionManagement = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllCategories();
-      setCategories([...res]);
+      const res = await getAllPromotions();
+      setPromotions([...res]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -79,8 +83,66 @@ const PromotionManagement = () => {
     setCondition(0);
     setReduce(0);
     setMax(0);
-    setExpire(0);
+    setExpire("");
     setErr("");
+  };
+
+  const handleAddPromotion = async () => {
+    if (description == "") {
+      setErr("Please type description");
+    } else if (condition <= 0) {
+      setErr("Condition must be larger than 0");
+    } else if (reduce <= 0) {
+      setErr("Reduce percent must be larger than 0");
+    } else if (max <= 0) {
+      setErr("Max reduce must be larger than 0");
+    } else if (expire == "") {
+      setErr("Choose expire date");
+    } else {
+      try {
+        await createPromotion(description, condition, reduce, max, expire);
+        setMess("Add promotion successfully !!!");
+        modalClose();
+        fetchData();
+      } catch (error) {
+        console.error("Error add promotion:", error);
+      }
+    }
+  };
+
+  const handleUpdatePromotion = async () => {
+    if (description == "") {
+      setErr("Please type description");
+    } else if (condition <= 0) {
+      setErr("Condition must be larger than 0");
+    } else if (reduce <= 0) {
+      setErr("Reduce percent must be larger than 0");
+    } else if (max <= 0) {
+      setErr("Max reduce must be larger than 0");
+    } else if (expire == "") {
+      setErr("Choose expire date");
+    } else {
+      try {
+        await updatePromotion(id, description, condition, reduce, max, expire);
+        setMess("Update promotion successfully !!!");
+        modalClose();
+        fetchData();
+      } catch (error) {
+        console.error("Error update promotion:", error);
+      }
+    }
+  };
+
+  const handleRemovePromotion = async () => {
+    try {
+      await removePromotion(id);
+      setMess("Remove promotion successfully !!!");
+      setId("");
+      setIsConfirm(false);
+      fetchData();
+    } catch (error) {
+      console.error("Error delete promotion:", error);
+    }
   };
 
   return (
@@ -134,44 +196,56 @@ const PromotionManagement = () => {
                   <TableColumn className="text-2xl">Status</TableColumn>
                   <TableColumn></TableColumn>
                 </TableHeader>
-                {categories.length == 0 ? (
+                {promotions.length == 0 ? (
                   <TableBody emptyContent={"No data to display."}>
                     {[]}
                   </TableBody>
                 ) : (
                   <TableBody>
-                    {categories.map((cate) => (
-                      <TableRow key={cate.id}>
-                        <TableCell className="text-2xl">{cate.id}</TableCell>
-                        <TableCell className="text-2xl">{cate.name}</TableCell>
-                        <TableCell className="text-2xl">{cate.name}</TableCell>
-                        <TableCell className="text-2xl">{cate.name}</TableCell>
-                        <TableCell className="text-2xl">{cate.name}</TableCell>
+                    {promotions.map((promotion) => (
+                      <TableRow key={promotion.id}>
                         <TableCell className="text-2xl">
-                          {cate.deletedAt == null ? (
-                            <Chip color="success">On-Sell</Chip>
+                          {promotion.description}
+                        </TableCell>
+                        <TableCell className="text-2xl">
+                          {promotion.conditionsOfUse}
+                        </TableCell>
+                        <TableCell className="text-2xl">
+                          {promotion.reducedPercent}
+                        </TableCell>
+                        <TableCell className="text-2xl">
+                          {promotion.maximumReduce}
+                        </TableCell>
+                        <TableCell className="text-2xl">
+                          {promotion.expiresTime.split("T")[0] +
+                            " " +
+                            promotion.expiresTime.split("T")[1].substring(0, 8)}
+                        </TableCell>
+                        <TableCell className="text-2xl">
+                          {promotion.status == "Active" ? (
+                            <Chip color="success">{promotion.status}</Chip>
                           ) : (
-                            <Chip color="danger">Removed</Chip>
+                            <Chip color="danger">{promotion.status}</Chip>
                           )}
                         </TableCell>
                         <TableCell>
                           <Button
                             className="w-1/6 bg-yellow-500 text-white"
                             aria-label="edit"
-                            onClick={() => modalEditOpen(cate)}
+                            onClick={() => modalEditOpen(promotion)}
                           >
                             <FontAwesomeIcon
                               icon={faEdit}
                               className="text-white-500"
                             />
                           </Button>
-                          {cate.deletedAt == null && (
+                          {promotion.deletedAt == null && (
                             <Button
                               className="w-1/6 bg-red-500 text-white"
                               aria-label="remove"
                               onClick={() => {
                                 setIsConfirm(true);
-                                setId(cate.id);
+                                setId(promotion.id);
                               }}
                             >
                               <FontAwesomeIcon
@@ -190,7 +264,7 @@ const PromotionManagement = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={Math.ceil(categories.length / 10)}
+                total={Math.ceil(promotions.length / 10)}
                 initialPage={page}
                 onChange={(event, newPage) => setPage(newPage)}
               />
@@ -198,7 +272,7 @@ const PromotionManagement = () => {
           </Card>
         </div>
       </div>
-      <Modal size="xl" isOpen={isOpen} onClose={() => modalClose}>
+      <Modal size="2xl" isOpen={isOpen} onClose={() => modalClose}>
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
@@ -241,8 +315,18 @@ const PromotionManagement = () => {
                     onChange={(e) => setMax(e.target.value)}
                     className="w-full p-4"
                   />
-                  <DatePicker
+                  {/* <DatePicker
                     isRequired
+                    label="Expire date"
+                    hideTimeZone
+                    showMonthAndYearPickers
+                    value={Date.parse(expire)}
+                    onChange={(e) => setExpire(e.target.value)}
+                    className="w-full p-4"
+                  /> */}
+                  <Input
+                    isRequired
+                    type="datetime-local"
                     label="Expire date"
                     value={expire}
                     onChange={(e) => setExpire(e.target.value)}
@@ -256,7 +340,10 @@ const PromotionManagement = () => {
               <Button color="danger" variant="light" onPress={modalClose}>
                 Close
               </Button>
-              <Button color="success" onPress={modalClose}>
+              <Button
+                color="success"
+                onPress={isEdit ? handleUpdatePromotion : handleAddPromotion}
+              >
                 {isEdit ? "Save" : "Create"}
               </Button>
             </ModalFooter>
@@ -288,7 +375,7 @@ const PromotionManagement = () => {
               >
                 No
               </Button>
-              <Button color="success" onPress={modalClose}>
+              <Button color="success" onPress={handleRemovePromotion}>
                 Yes
               </Button>
             </ModalFooter>
