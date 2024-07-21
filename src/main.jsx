@@ -11,6 +11,7 @@ import Product from "./components/pages/Product";
 import "./index.css";
 import CategoryManagement from "./components/pages/AdminPage/CategoryManage";
 import PromotionManagement from "./components/pages/AdminPage/PromotionManage";
+import ViewOrder from "./components/pages/AdminPage/ViewOrder";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/admin/promotion-manage"
           element={<PromotionManagement />}
         />
+        <Route path="/admin/view-order" element={<ViewOrder />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
