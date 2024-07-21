@@ -136,69 +136,77 @@ const CategoryManagement = () => {
                 <FontAwesomeIcon icon={faAdd} className="text-white-500" /> New
                 Category
               </Button>
-              <Table aria-label="Users Table">
-                <TableHeader>
-                  <TableColumn className="text-2xl">Id</TableColumn>
-                  <TableColumn className="text-2xl">Name</TableColumn>
-                  <TableColumn className="text-2xl">Status</TableColumn>
-                  <TableColumn></TableColumn>
-                </TableHeader>
-                {categories.length == 0 ? (
-                  <TableBody emptyContent={"No data to display."}>
-                    {[]}
-                  </TableBody>
-                ) : (
-                  <TableBody>
-                    {categories.map((cate) => (
-                      <TableRow key={cate.id}>
-                        <TableCell className="text-2xl">{cate.id}</TableCell>
-                        <TableCell className="text-2xl">{cate.name}</TableCell>
-                        <TableCell className="text-2xl">
-                          {cate.deletedAt == null ? (
-                            <Chip color="success">On-Sell</Chip>
-                          ) : (
-                            <Chip color="danger">Removed</Chip>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            className="w-1/6 bg-yellow-500 text-white"
-                            aria-label="edit"
-                            onClick={() => modalEditOpen(cate)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faEdit}
-                              className="text-white-500"
-                            />
-                          </Button>
-                          {cate.deletedAt == null && (
-                            <Button
-                              className="w-1/6 bg-red-500 text-white"
-                              aria-label="remove"
-                              onClick={() => {
-                                setIsConfirm(true);
-                                setId(cate.id);
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faRemove}
-                                className="text-white-500"
-                              />
-                            </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                )}
-              </Table>
+              <div className="w-full flex justify-center">
+                <Table aria-label="Users Table" className="w-3/4">
+                  <TableHeader>
+                    <TableColumn className="text-2xl">Id</TableColumn>
+                    <TableColumn className="text-2xl">Name</TableColumn>
+                    <TableColumn className="text-2xl">Status</TableColumn>
+                    <TableColumn></TableColumn>
+                  </TableHeader>
+                  {categories.length == 0 ? (
+                    <TableBody emptyContent={"No data to display."}>
+                      {[]}
+                    </TableBody>
+                  ) : (
+                    <TableBody>
+                      {categories
+                        .slice((page - 1) * 8, page * 8)
+                        .map((cate) => (
+                          <TableRow key={cate.id}>
+                            <TableCell className="text-2xl">
+                              {cate.id}
+                            </TableCell>
+                            <TableCell className="text-2xl">
+                              {cate.name}
+                            </TableCell>
+                            <TableCell className="text-2xl">
+                              {cate.deletedAt == null ? (
+                                <Chip color="success">On-Sell</Chip>
+                              ) : (
+                                <Chip color="danger">Removed</Chip>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                className="w-1/6 bg-yellow-500 text-white"
+                                aria-label="edit"
+                                onClick={() => modalEditOpen(cate)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faEdit}
+                                  className="text-white-500"
+                                />
+                              </Button>
+                              {cate.deletedAt == null && (
+                                <Button
+                                  className="w-1/6 bg-red-500 text-white"
+                                  aria-label="remove"
+                                  onClick={() => {
+                                    setIsConfirm(true);
+                                    setId(cate.id);
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faRemove}
+                                    className="text-white-500"
+                                  />
+                                </Button>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  )}
+                </Table>
+              </div>
             </CardBody>
             <CardFooter>
               <Pagination
                 showControls
-                total={Math.ceil(categories.length / 10)}
+                total={Math.ceil(categories.length / 8)}
                 initialPage={page}
-                onChange={(event, newPage) => setPage(newPage)}
+                onChange={(newPage) => setPage(newPage)}
               />
             </CardFooter>
           </Card>
