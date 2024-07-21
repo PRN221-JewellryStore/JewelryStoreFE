@@ -202,61 +202,65 @@ const PromotionManagement = () => {
                   </TableBody>
                 ) : (
                   <TableBody>
-                    {promotions.map((promotion) => (
-                      <TableRow key={promotion.id}>
-                        <TableCell className="text-2xl">
-                          {promotion.description}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {promotion.conditionsOfUse}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {promotion.reducedPercent}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {promotion.maximumReduce}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {promotion.expiresTime.split("T")[0] +
-                            " " +
-                            promotion.expiresTime.split("T")[1].substring(0, 8)}
-                        </TableCell>
-                        <TableCell className="text-2xl">
-                          {promotion.status == "Active" ? (
-                            <Chip color="success">{promotion.status}</Chip>
-                          ) : (
-                            <Chip color="danger">{promotion.status}</Chip>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            className="w-1/6 bg-yellow-500 text-white"
-                            aria-label="edit"
-                            onClick={() => modalEditOpen(promotion)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faEdit}
-                              className="text-white-500"
-                            />
-                          </Button>
-                          {promotion.deletedAt == null && (
+                    {promotions
+                      .slice((page - 1) * 8, page * 8)
+                      .map((promotion) => (
+                        <TableRow key={promotion.id}>
+                          <TableCell className="text-2xl">
+                            {promotion.description}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {promotion.conditionsOfUse}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {promotion.reducedPercent}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {promotion.maximumReduce}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {promotion.expiresTime.split("T")[0] +
+                              " " +
+                              promotion.expiresTime
+                                .split("T")[1]
+                                .substring(0, 8)}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {promotion.status == "Active" ? (
+                              <Chip color="success">{promotion.status}</Chip>
+                            ) : (
+                              <Chip color="danger">{promotion.status}</Chip>
+                            )}
+                          </TableCell>
+                          <TableCell>
                             <Button
-                              className="w-1/6 bg-red-500 text-white"
-                              aria-label="remove"
-                              onClick={() => {
-                                setIsConfirm(true);
-                                setId(promotion.id);
-                              }}
+                              className="w-1/6 bg-yellow-500 text-white"
+                              aria-label="edit"
+                              onClick={() => modalEditOpen(promotion)}
                             >
                               <FontAwesomeIcon
-                                icon={faRemove}
+                                icon={faEdit}
                                 className="text-white-500"
                               />
                             </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                            {promotion.deletedAt == null && (
+                              <Button
+                                className="w-1/6 bg-red-500 text-white"
+                                aria-label="remove"
+                                onClick={() => {
+                                  setIsConfirm(true);
+                                  setId(promotion.id);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faRemove}
+                                  className="text-white-500"
+                                />
+                              </Button>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 )}
               </Table>
@@ -264,9 +268,9 @@ const PromotionManagement = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={Math.ceil(promotions.length / 10)}
+                total={Math.ceil(promotions.length / 8)}
                 initialPage={page}
-                onChange={(event, newPage) => setPage(newPage)}
+                onChange={(newPage) => setPage(newPage)}
               />
             </CardFooter>
           </Card>
