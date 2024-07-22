@@ -47,6 +47,7 @@ const PromotionManagement = () => {
   const [mess, setMess] = useState("");
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -174,16 +175,30 @@ const PromotionManagement = () => {
               </div>
             </CardHeader>
             <CardBody>
-              <Button
-                className="w-1/6 bg-green-500 text-white text-xl"
-                aria-label="add"
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> Thêm
-                mới
-              </Button>
+              <div className="w-full flex flex-row">
+                <div className="flex justify-center items-center">
+                  <Button
+                    className="w-full bg-green-500 text-white text-2xl"
+                    aria-label="add"
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faAdd} className="text-white-500" />{" "}
+                    Thêm mới
+                  </Button>
+                </div>
+                <Input
+                  type="text"
+                  placeholder="Tìm kiếm bằng mô tả ..."
+                  className="p-4 w-1/4"
+                  isClearable
+                  onClear={() => setSearch("")}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+
               <Table aria-label="Users Table">
                 <TableHeader>
                   <TableColumn className="text-2xl">Mô tả</TableColumn>
@@ -203,6 +218,11 @@ const PromotionManagement = () => {
                 ) : (
                   <TableBody>
                     {promotions
+                      .filter((pro) =>
+                        pro.description
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                      )
                       .slice((page - 1) * 8, page * 8)
                       .map((promotion) => (
                         <TableRow key={promotion.id}>
@@ -268,7 +288,11 @@ const PromotionManagement = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={Math.ceil(promotions.length / 8)}
+                total={Math.ceil(
+                  promotions.filter((pro) =>
+                    pro.description.toLowerCase().includes(search.toLowerCase())
+                  ).length / 8
+                )}
                 initialPage={page}
                 onChange={(newPage) => setPage(newPage)}
               />

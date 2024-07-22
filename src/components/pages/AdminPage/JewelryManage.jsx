@@ -53,6 +53,7 @@ const JewelryManage = () => {
   const [mess, setMess] = useState("");
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -224,6 +225,17 @@ const JewelryManage = () => {
                     Thêm mới
                   </Button>
                 </div>
+                <div className="flex justify-center items-center w-1/4">
+                  <Input
+                    type="text"
+                    placeholder="Tìm kiếm bằng tên hoặc mô tả ..."
+                    className="w-full"
+                    isClearable
+                    onClear={() => setSearch("")}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
                 <Select
                   label="Danh mục"
                   defaultSelectedKeys={[String(selectedCate)]}
@@ -251,6 +263,15 @@ const JewelryManage = () => {
                 ) : selectedCate == 0 ? (
                   <TableBody>
                     {jewelries
+                      .filter(
+                        (jewel) =>
+                          jewel.name
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                          jewel.description
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                      )
                       .slice((page - 1) * 8, page * 8)
                       .map((jewelry) => (
                         <TableRow key={jewelry.id}>
@@ -310,7 +331,17 @@ const JewelryManage = () => {
                 ) : (
                   <TableBody>
                     {jewelries
-                      .filter((jewelry) => jewelry.categoryID == selectedCate)
+                      .filter(
+                        (jewelry) =>
+                          (jewelry.categoryID == selectedCate &&
+                            jewelry.name
+                              .toLowerCase()
+                              .includes(search.toLowerCase())) ||
+                          (jewelry.categoryID == selectedCate &&
+                            jewelry.description
+                              .toLowerCase()
+                              .includes(search.toLowerCase()))
+                      )
                       .slice((page - 1) * 8, page * 8)
                       .map((jewelry) => (
                         <TableRow key={jewelry.id}>
@@ -374,7 +405,17 @@ const JewelryManage = () => {
               {selectedCate == 0 ? (
                 <Pagination
                   showControls
-                  total={Math.ceil(jewelries.length / 8)}
+                  total={Math.ceil(
+                    jewelries.filter(
+                      (jewel) =>
+                        jewel.name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        jewel.description
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                    ).length / 8
+                  )}
                   initialPage={page}
                   onChange={(newPage) => setPage(newPage)}
                 />
@@ -383,7 +424,15 @@ const JewelryManage = () => {
                   showControls
                   total={Math.ceil(
                     jewelries.filter(
-                      (jewelry) => jewelry.categoryID == selectedCate
+                      (jewelry) =>
+                        (jewelry.categoryID == selectedCate &&
+                          jewelry.name
+                            .toLowerCase()
+                            .includes(search.toLowerCase())) ||
+                        (jewelry.categoryID == selectedCate &&
+                          jewelry.description
+                            .toLowerCase()
+                            .includes(search.toLowerCase()))
                     ).length / 8
                   )}
                   initialPage={page}

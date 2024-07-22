@@ -41,6 +41,7 @@ const CategoryManagement = () => {
   const [mess, setMess] = useState("");
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -125,16 +126,29 @@ const CategoryManagement = () => {
               </div>
             </CardHeader>
             <CardBody>
-              <Button
-                className="w-1/6 bg-green-500 text-white text-2xl"
-                aria-label="add"
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> Thêm
-                mới
-              </Button>
+              <div className="w-full flex flex-row">
+                <div className="flex justify-center items-center">
+                  <Button
+                    className="w-full bg-green-500 text-white text-2xl"
+                    aria-label="add"
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faAdd} className="text-white-500" />{" "}
+                    Thêm mới
+                  </Button>
+                </div>
+                <Input
+                  type="text"
+                  placeholder="Tìm kiếm bằng tên ..."
+                  className="p-4 w-1/4"
+                  isClearable
+                  onClear={() => setSearch("")}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
               <div className="w-full flex justify-center">
                 <Table aria-label="Users Table" className="w-3/4">
                   <TableHeader>
@@ -149,6 +163,9 @@ const CategoryManagement = () => {
                   ) : (
                     <TableBody>
                       {categories
+                        .filter((cate) =>
+                          cate.name.toLowerCase().includes(search.toLowerCase())
+                        )
                         .slice((page - 1) * 8, page * 8)
                         .map((cate) => (
                           <TableRow key={cate.id}>
@@ -195,7 +212,11 @@ const CategoryManagement = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={Math.ceil(categories.length / 8)}
+                total={Math.ceil(
+                  categories.filter((cate) =>
+                    cate.name.toLowerCase().includes(search.toLowerCase())
+                  ).length / 8
+                )}
                 initialPage={page}
                 onChange={(newPage) => setPage(newPage)}
               />

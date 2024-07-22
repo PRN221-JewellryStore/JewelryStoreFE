@@ -46,6 +46,7 @@ const UserManage = () => {
   const [mess, setMess] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -148,6 +149,15 @@ const UserManage = () => {
               </div>
             </CardHeader>
             <CardBody>
+              <Input
+                type="text"
+                placeholder="Tìm kiếm bằng tên người dùng ..."
+                className="p-4 w-1/4"
+                isClearable
+                onClear={() => setSearch("")}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
               <Table aria-label="Users Table">
                 <TableHeader>
                   <TableColumn className="text-2xl">Họ tên</TableColumn>
@@ -164,6 +174,11 @@ const UserManage = () => {
                 ) : (
                   <TableBody>
                     {users
+                      .filter((user) =>
+                        user.fullName
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                      )
                       .slice((page - 1) * 8, page * 8)
                       .map((user, index) => (
                         <TableRow key={index}>
@@ -234,7 +249,11 @@ const UserManage = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={users.length / 8}
+                total={
+                  users.filter((user) =>
+                    user.fullName.toLowerCase().includes(search.toLowerCase())
+                  ).length / 8
+                }
                 initialPage={page}
                 onChange={(newPage) => setPage(newPage)}
               />
