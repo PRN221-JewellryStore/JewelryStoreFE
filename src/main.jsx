@@ -12,11 +12,11 @@ import { store } from "./app/store";
 import RegisterPage from "./components/pages/RegisterPage/RegisterPage";
 import { NotFound } from "./components/pages/NotFound/NotFound";
 import LoginPage from "./components/pages/LoginPage/LoginPage";
-import DiamondPage from "./components/pages/DiamondPage/DiamondPage";
 import HomePage from "./components/pages/HomePage/HomePage";
 import { ProductDetailPage } from "./components/pages/ProductDetailPage";
 import { CartPage } from "./components/pages/CartPage";
 import { ShopCategoryPage } from "./components/pages/ShopCategoryPage";
+import { PrivateRoute } from "./components/pages/PrivateRoute";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -33,9 +33,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             element={<ProductDetailPage />}
           />
           <Route path="shop-category" element={<ShopCategoryPage />} />
+          <Route path="/" element={<PrivateRoute />}>
+            
+          </Route>
           <Route path="cart" element={<CartPage />} />
-          <Route path="diamond" element={<DiamondPage />} />
-
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/admin/user-manage" element={<UserManage />} />

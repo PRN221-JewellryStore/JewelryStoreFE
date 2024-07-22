@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Input, Row } from "reactstrap";
+import { Container, Input, Row, Col } from "reactstrap";
 import { axiosClient } from "src/axios/AxiosClient";
 import {
   BannerPath,
@@ -10,13 +10,12 @@ import {
 import { RadioList } from "./components";
 
 const sortOptions = [
-  { key: "asc", value: "Price ASC" },
-  { key: "desc", value: "Price DESC" },
+  { key: "asc", value: "Tăng Dần" },
+  { key: "desc", value: "Giảm Dần" },
 ];
+
 export const ShopCategoryPage = () => {
   const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [colors, setColors] = useState([]);
   const [productPage, setProductPage] = useState({
     data: [],
     totalElements: 0,
@@ -24,150 +23,117 @@ export const ShopCategoryPage = () => {
   });
   const [searchParams, setSearchParams] = useState({
     categoryId: null,
-    brandId: null,
-    colorId: null,
+    name: "",
     sortByPrice: null,
-    name: null,
-    priceFrom: null,
-    priceTo: 10000,
     pageIndex: 1,
-    pageSize: 1,
+    pageSize: 6,
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data: categories } = await axiosClient.get("/categories");
-      setCategories(
-        categories.map((category) => ({
-          id: category.id,
-          name: category.categoryName,
-          type: "Category",
-        }))
-      );
-      const { data: brands } = await axiosClient.get("/brands");
-      setBrands(
-        brands.map((brand) => ({
-          id: brand.id,
-          name: brand.branchName,
-          type: "Brand",
-        }))
-      );
-      const { data: colors } = await axiosClient.get("/colors");
-      setColors(
-        colors.map((color) => ({
-          id: color.id,
-          name: color.colorName,
-          type: "Color",
-        }))
-      );
+    const fetchCategories = async () => {
+      const categories = await axiosClient.get("/Category/getall");
+      const products = await axiosClient.get("/Product/getall");
 
-      const { data: productPage } = await axiosClient.get("/products/search", {
-        params: searchParams,
+      const categoryCounts = categories.map((category) => {
+        const count = products.filter((product) => product.categoryID === category.id).length;
+        return { ...category, count };
       });
-      setProductPage(productPage);
+
+      setCategories(categoryCounts);
     };
-    fetchData();
+    fetchCategories();
   }, []);
 
-  const searchProducts = async (params) => {
-    const { data: productPage } = await axiosClient.get("/products/search", {
-      params,
+  const fetchAllProducts = async () => {
+    const products = await axiosClient.get("/Product/getall");
+    let sortedProducts = products;
+
+    if (searchParams.sortByPrice) {
+      sortedProducts = products.sort((a, b) => {
+        return searchParams.sortByPrice === "asc" ? a.cost - b.cost : b.cost - a.cost;
+      });
+    }
+
+    const paginatedProducts = sortedProducts.slice(
+      (searchParams.pageIndex - 1) * searchParams.pageSize,
+      searchParams.pageIndex * searchParams.pageSize
+    );
+
+    setProductPage({
+      data: paginatedProducts,
+      totalElements: sortedProducts.length,
+      totalPage: Math.ceil(sortedProducts.length / searchParams.pageSize),
     });
-    setProductPage(productPage);
+  };
+
+  const searchProducts = async () => {
+    let url = "/Product";
+    let params = {
+      pageIndex: searchParams.pageIndex,
+      pageSize: searchParams.pageSize,
+    };
+    if (searchParams.name) {
+      url += `/search-by-name/${encodeURIComponent(searchParams.name)}`;
+    } else if (searchParams.categoryId) {
+      url += `/search-by-Category/${searchParams.categoryId}`;
+    } else {
+      await fetchAllProducts();
+      return;
+    }
+    const products = await axiosClient.get(url, { params });
+
+    let sortedProducts = products;
+    if (searchParams.sortByPrice) {
+      sortedProducts = products.sort((a, b) => {
+        return searchParams.sortByPrice === "asc" ? a.cost - b.cost : b.cost - a.cost;
+      });
+    }
+
+    const paginatedProducts = sortedProducts.slice(
+      (searchParams.pageIndex - 1) * searchParams.pageSize,
+      searchParams.pageIndex * searchParams.pageSize
+    );
+
+    setProductPage({
+      data: paginatedProducts,
+      totalElements: sortedProducts.length,
+      totalPage: Math.ceil(sortedProducts.length / searchParams.pageSize),
+    });
   };
 
   useEffect(() => {
-    if (searchParams) {
-      if (searchParams.sortByPrice === "default") {
-        searchParams.sortByPrice = null;
-      }
-      searchProducts(searchParams);
-    }
+    fetchAllProducts();
+  }, []);
+
+  useEffect(() => {
+    searchProducts();
   }, [searchParams]);
 
   return (
     <main className="shop-category-page__main">
-      <BannerPath title="Shop Category" path="Home - Shop Category" />
-      <Container className="max-w-screen-xl mt-24">
-        <Row>
-          <Col md="5" lg="4" xl="3">
+      <BannerPath title="Shop Category" path="Home - Shop Category" image="src/assets/image/slider-bg.jpg" />
+      <Container className="max-w-[1140px] mt-[98px]">
+        <div className="flex">
+          <div className="w-1/4">
             <div className="sidebar">
-              <div className="sidebar__header bg-blue-600 text-white py-4 px-8 text-lg">
+              <div className="leading-[50px] bg-[#384aeb] px-[30px] text-[18px] font-normal text-white">
                 Browse Categories
               </div>
-              <div className="sidebar__main bg-gray-100 p-5 border-b border-gray-300">
+              <div className="px-[28px] py-[20px] bg-[#f1f6f7] border-b border-[#eee] last:border-none">
                 <RadioList
                   selected={searchParams.categoryId}
                   onSelect={(categoryId) => {
-                    setSearchParams({ ...searchParams, categoryId });
+                    setSearchParams({ ...searchParams, categoryId, name: "" });
                   }}
-                  data={categories}
+                  data={categories.map(category => ({ id: category.id, name: category.name, count: category.count }))}
                 />
               </div>
             </div>
-            <div className="sidebar mt-4">
-              <div className="sidebar__header bg-blue-600 text-white py-4 px-8 text-lg">
-                Product Filter
-              </div>
-              <div className="sidebar__main bg-gray-100 p-5 border-b border-gray-300">
-                <div className="sidebar__title text-base">
-                  Brands
-                </div>
-                <RadioList
-                  selected={searchParams.brandId}
-                  onSelect={(brandId) => {
-                    setSearchParams({ ...searchParams, brandId });
-                  }}
-                  data={brands}
-                />
-              </div>
-              <div className="sidebar__main bg-gray-100 p-5 border-b border-gray-300">
-                <div className="sidebar__title text-base">
-                  Colors
-                </div>
-                <RadioList
-                  selected={searchParams.colorId}
-                  onSelect={(colorId) => {
-                    setSearchParams({ ...searchParams, colorId });
-                  }}
-                  data={colors}
-                />
-              </div>
-              <div className="sidebar__main bg-gray-100 p-5">
-                <div className="sidebar__title text-base">
-                  Price
-                </div>
-                <div className="sidebar__range flex">
-                  <Input
-                    className="w-1/2 outline-none"
-                    placeholder="From"
-                    value={searchParams.priceFrom}
-                    onChange={(e) => {
-                      setSearchParams({
-                        ...searchParams,
-                        priceFrom: parseInt(e.target.value),
-                      });
-                    }}
-                  />
-                  <Input
-                    className="w-1/2 outline-none ml-2"
-                    placeholder="To"
-                    value={searchParams.priceTo}
-                    onChange={(e) => {
-                      setSearchParams({
-                        ...searchParams,
-                        priceTo: parseInt(e.target.value),
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </Col>
-          <Col md="7" lg="8" xl="9">
-            <div className="filter-bar flex items-center flex-wrap bg-gray-100 p-5 mb-7">
+          </div>
+          <div className="w-3/4">
+            <div className="bg-[#f1f6f7] p-4 mb-4 flex justify-between items-center w-full">
               <SelectBoxCustom
-                className="filter-bar__sort w-1/4 h-10 mr-2"
+                className="w-1/4"
                 data={sortOptions}
                 selected={searchParams.sortByPrice}
                 onSelectBoxChange={(sortByPrice) => {
@@ -175,8 +141,7 @@ export const ShopCategoryPage = () => {
                 }}
               />
               <Input
-                className="filter-bar__search ml-auto w-52"
-                bsSize="sm"
+                className="max-w-[200px]"
                 type="search"
                 placeholder="Search here..."
                 value={searchParams.name}
@@ -186,7 +151,7 @@ export const ShopCategoryPage = () => {
               />
             </div>
             <ProductList products={productPage.data} xl="3" />
-            <div className="flex justify-end mb-12">
+            <div className="flex justify-center mb-[50px] space-x-5">
               <PaginationComponent
                 pageIndex={searchParams.pageIndex}
                 onPageChange={(pageIndex) => {
@@ -195,8 +160,8 @@ export const ShopCategoryPage = () => {
                 totalPage={productPage.totalPage}
               />
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Container>
     </main>
   );

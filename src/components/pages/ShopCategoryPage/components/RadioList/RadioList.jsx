@@ -10,9 +10,9 @@ export const RadioList = ({ data, selected, onSelect }) => {
           <Input
             type="radio"
             id={item.id}
-            name={item.type}
+            name="category" // Ensure all radios share the same name
             value={item.id}
-            selected={selected === item.id}
+            checked={selected === item.id}
             onChange={(e) => {
               onSelect(parseInt(e.target.value));
             }}
@@ -20,7 +20,7 @@ export const RadioList = ({ data, selected, onSelect }) => {
           />
           <label htmlFor={item.id}>
             {item.name}
-            <span> ({item.quantity})</span>
+            <span> ({item.count})</span>
           </label>
         </li>
       ))}

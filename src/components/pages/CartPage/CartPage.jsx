@@ -37,7 +37,7 @@ export const CartPage = () => {
               className="w-full border rounded py-1 px-2"
             />
           </td>
-          <td className="py-4">${product.cost * quantity}</td>
+          <td className="py-4 ">${product.cost * quantity}</td>
         </tr>
       );
     }
@@ -46,17 +46,17 @@ export const CartPage = () => {
 
   return (
     <>
-      <BannerPath title="Shopping Cart" path="Home - Shopping Cart" />
+      <BannerPath title="Shopping Cart" path="Home - Shopping Cart" image="src/assets/image/slider-bg.jpg"/>
       <div className="py-24 px-5">
         <div className="container mx-auto">
           <Table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b">
-                <th className="py-4">Product</th>
-                <th className="py-4">Name</th>
-                <th className="py-4">Price</th>
-                <th className="py-4">Quantity</th>
-                <th className="py-4">Total</th>
+                <th className="py-5">Product</th>
+                <th className="py-5">Name</th>
+                <th className="py-5">Price</th>
+                <th className="py-5">Quantity</th>
+                <th className="py-5">Total</th>
               </tr>
             </thead>
             <tbody>{renderCartRow()}</tbody>

@@ -4,9 +4,17 @@
   justify-content: center;
   height: 410px;
   background-color: #f1f6f7;
+  background-size: cover;
+  background-position: center;
+  color: #FFD700;
+}
+
+.banner-path h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
 .banner-path span {
+  font-size: 21px;
   text-transform: capitalize;
-  color: #777777;
 }

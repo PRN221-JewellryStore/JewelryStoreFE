@@ -11,9 +11,11 @@ export const Offer = () => {
           </h3>
           <h4 className="text-3xl mb-4">Winter Sale</h4>
           <p className="text-yellow-400 mb-4">Him she'd let them sixth saw light</p>
-          <button className="border border-black rounded-full font-medium px-12 py-3 bg-black text-white transition duration-400 hover:bg-transparent hover:text-black mt-3 md:mt-4">
-            Shop Now
-          </button>
+          <a href="/shop-category">
+            <button className="border border-black rounded-full font-medium px-12 py-3 bg-black text-white transition duration-400 hover:bg-transparent hover:text-black mt-3 md:mt-4">
+              Shop Now
+            </button>
+          </a>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ export const Banner = () => {
               </p>
               <a
                 className="inline-block border border-white rounded-full font-medium px-8 py-3 bg-white text-[#1e3c72] transition duration-300 hover:bg-transparent hover:text-white"
-                href="/diamond"
+                href="/shop-category"
               >
                 Shop Now
               </a>
