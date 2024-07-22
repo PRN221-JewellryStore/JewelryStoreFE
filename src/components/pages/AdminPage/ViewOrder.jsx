@@ -13,14 +13,41 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAllOrders } from "src/api/orderApi";
 import NavBar from "src/components/Header/Navbar";
 import Sidebar from "src/components/Sidebar/Sidebar";
 
 const ViewOrder = () => {
   const [page, setPage] = useState(1);
   const [openDetail, setOpenDetail] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [orderDetail, setOrderDetail] = useState([]);
+  const [user, setUser] = useState({});
+  const [promotion, setPromotion] = useState("");
+  const [status, setStatus] = useState("");
+  const [primaryPrice, setPrimaryPrice] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    fetchAllOrder();
+  }, []);
+
+  const fetchAllOrder = async () => {
+    try {
+      const res = await getAllOrders();
+      setOrders([...res]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <div className="flex flex-row">
@@ -50,165 +77,71 @@ const ViewOrder = () => {
             </CardHeader>
             <CardBody>
               <div className="gap-2 grid grid-cols-2 sm:grid-cols-5">
-                <Card
-                  shadow="sm"
-                  isPressable
-                  className="rounded-lg border-1 border-solid border-black"
-                  onPress={() => setOpenDetail(true)}
-                >
-                  <CardBody className="overflow-visible p-0">
-                    {/* <Image
-                      shadow="sm"
-                      radius="lg"
-                      width="100%"
-                      alt="order"
-                      className="w-full object-cover h-[160px]"
-                      src="https://nextui.org/images/hero-card.jpeg"
-                    /> */}
-                    <div className="rounded-lg w-full object-cover h-[300px]">
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Khách hàng:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          Minh Tâm
-                        </p>
+                {orders.map((order) => (
+                  <Card
+                    shadow="sm"
+                    isPressable
+                    className="rounded-lg border-1 border-solid border-black"
+                    onPress={() => {
+                      setOpenDetail(true);
+                      setOrderDetail([...order.orderDetails]);
+                      setUser(order.user);
+                      setPromotion(order.promotion.description);
+                      setStatus(order.status);
+                      setPrimaryPrice(order.primaryPrice);
+                      setTotal(order.total);
+                    }}
+                    key={order.id}
+                  >
+                    <CardBody className="overflow-visible p-0">
+                      <div className="rounded-lg w-full object-cover h-[200px]">
+                        <div className="w-full flex flex-row p-2">
+                          <b className="text-xl w-1/2">Khách hàng:</b>
+                          <p className="w-1/2 text-default-500 text-xl">
+                            {order.user.fullName}
+                          </p>
+                        </div>
+                        <div className="w-full flex flex-row p-2">
+                          <b className="text-xl w-1/2">CT Khuyến mãi:</b>
+                          <p className="w-1/2 text-default-500 text-xl">
+                            {order.promotion.description}
+                          </p>
+                        </div>
+                        <div className="w-full flex flex-row p-2">
+                          <b className="text-xl w-1/2">Tổng tiền:</b>
+                          <p className="w-1/2 text-default-500 text-xl">
+                            {order.primaryPrice.toLocaleString("en-US", {
+                              style: "decimal",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}{" "}
+                            VNĐ
+                          </p>
+                        </div>
+                        <div className="w-full flex flex-row p-2">
+                          <b className="text-xl w-1/2">Tổng thanh toán:</b>
+                          <p className="w-1/2 text-default-500 text-xl">
+                            {order.total.toLocaleString("en-US", {
+                              style: "decimal",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}{" "}
+                            VNĐ
+                          </p>
+                        </div>
                       </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Quầy hàng:</b>
-                        <p className="w-3/5 text-default-500 text-xl">Đá cây</p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Promotion:</b>
-                        <p className="w-3/5 text-default-500 text-xl">abc</p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Ghi chú:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          mới học C++ kiếm bạn học cùng hỗ trợ nhau ạ
-                        </p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Tổng tiền:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          500.000 VNĐ
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="horizontal strong mt-0 mb-2" />
-                  </CardBody>
-                  <CardFooter className="text-small justify-center">
-                    {/* <b className="text-2xl">Tổng tiền:</b>
-                    <p className="text-default-500 text-2xl">500.000 VNĐ</p> */}
-                    <Chip color="success" size="lg">
-                      Paid
-                    </Chip>
-                  </CardFooter>
-                </Card>
-                <Card
-                  shadow="sm"
-                  isPressable
-                  className="rounded-lg border-1 border-solid border-black"
-                  onPress={() => setOpenDetail(true)}
-                >
-                  <CardBody className="overflow-visible p-0">
-                    {/* <Image
-                      shadow="sm"
-                      radius="lg"
-                      width="100%"
-                      alt="order"
-                      className="w-full object-cover h-[160px]"
-                      src="https://nextui.org/images/hero-card.jpeg"
-                    /> */}
-                    <div className="rounded-lg w-full object-cover h-[300px]">
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Khách hàng:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          Nhật Quang
-                        </p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Quầy hàng:</b>
-                        <p className="w-3/5 text-default-500 text-xl">Đá cục</p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Promotion:</b>
-                        <p className="w-3/5 text-default-500 text-xl">abc</p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Ghi chú:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          mới học C++ kiếm bạn học cùng hỗ trợ nhau ạ
-                        </p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Tổng tiền:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          300.000 VNĐ
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="horizontal strong mt-0 mb-2" />
-                  </CardBody>
-                  <CardFooter className="text-small justify-center">
-                    {/* <b className="text-2xl">Tổng tiền:</b>
-                    <p className="text-default-500 text-2xl">500.000 VNĐ</p> */}
-                    <Chip color="danger" size="lg">
-                      Canceled
-                    </Chip>
-                  </CardFooter>
-                </Card>
-                <Card
-                  shadow="sm"
-                  isPressable
-                  className="rounded-lg border-1 border-solid border-black"
-                  onPress={() => setOpenDetail(true)}
-                >
-                  <CardBody className="overflow-visible p-0">
-                    {/* <Image
-                      shadow="sm"
-                      radius="lg"
-                      width="100%"
-                      alt="order"
-                      className="w-full object-cover h-[160px]"
-                      src="https://nextui.org/images/hero-card.jpeg"
-                    /> */}
-                    <div className="rounded-lg w-full object-cover h-[300px]">
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Khách hàng:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          Tấn Toàn
-                        </p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Quầy hàng:</b>
-                        <p className="w-3/5 text-default-500 text-xl">Đá bào</p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Promotion:</b>
-                        <p className="w-3/5 text-default-500 text-xl">abc</p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Ghi chú:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          mới học C++ kiếm bạn học cùng hỗ trợ nhau ạ
-                        </p>
-                      </div>
-                      <div className="w-full flex flex-row p-2">
-                        <b className="text-xl w-2/5">Tổng tiền:</b>
-                        <p className="w-3/5 text-default-500 text-xl">
-                          50.000 VNĐ
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="horizontal strong mt-0 mb-2" />
-                  </CardBody>
-                  <CardFooter className="text-small justify-center">
-                    {/* <b className="text-2xl">Tổng tiền:</b>
-                    <p className="text-default-500 text-2xl">500.000 VNĐ</p> */}
-                    <Chip color="primary" size="lg">
-                      Shipping
-                    </Chip>
-                  </CardFooter>
-                </Card>
+                      <hr className="horizontal strong mt-0 mb-2" />
+                    </CardBody>
+                    <CardFooter className="text-small justify-center">
+                      <Chip
+                        color={order.status == "Done" ? "success" : "danger"}
+                        size="lg"
+                      >
+                        {order.status}
+                      </Chip>
+                    </CardFooter>
+                  </Card>
+                ))}
               </div>
             </CardBody>
             <CardFooter>
@@ -220,44 +153,122 @@ const ViewOrder = () => {
               />
             </CardFooter>
           </Card>
-          <Modal isOpen={openDetail} onOpenChange={() => setOpenDetail(false)}>
+          <Modal
+            size="4xl"
+            isOpen={openDetail}
+            onClose={() => {
+              setOpenDetail(false);
+              setOrderDetail([]);
+              setUser({});
+              setPromotion("");
+              setStatus("");
+              setPrimaryPrice(0);
+              setTotal(0);
+            }}
+          >
             <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader className="flex flex-col gap-1">
-                    Modal Title
-                  </ModalHeader>
-                  <ModalBody>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nullam pulvinar risus non risus hendrerit venenatis.
-                      Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nullam pulvinar risus non risus hendrerit venenatis.
-                      Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                    </p>
-                    <p>
-                      Magna exercitation reprehenderit magna aute tempor
-                      cupidatat consequat elit dolor adipisicing. Mollit dolor
-                      eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                      officia eiusmod Lorem aliqua enim laboris do dolor
-                      eiusmod. Et mollit incididunt nisi consectetur esse
-                      laborum eiusmod pariatur proident Lorem eiusmod et. Culpa
-                      deserunt nostrud ad veniam.
-                    </p>
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Close
-                    </Button>
-                    <Button color="primary" onPress={onClose}>
-                      Action
-                    </Button>
-                  </ModalFooter>
-                </>
-              )}
+              <ModalHeader className="flex flex-col gap-1">
+                Chi tiết
+              </ModalHeader>
+              <ModalBody>
+                <div className="w-full text-xl flex">
+                  <p className="w-1/3">
+                    <span className="text-xl font-bold">Người mua:</span>{" "}
+                    {user.fullName}
+                  </p>
+                  <p className="w-1/3">
+                    <span className="text-xl font-bold">Địa chỉ:</span>{" "}
+                    {user.address}
+                  </p>
+                  <p className="w-1/3">
+                    <span className="text-xl font-bold">SĐT:</span>{" "}
+                    {user.phoneNumber}
+                  </p>
+                </div>
+                <p className="w-full text-xl">
+                  <span className="text-xl font-bold">CT Khuyến mãi:</span>{" "}
+                  {promotion}
+                </p>
+                <div className="w-full text-xl flex">
+                  <p className="w-1/2 text-xl">
+                    <span className="text-xl font-bold">Tổng tiền:</span>{" "}
+                    {total.toLocaleString("en-US", {
+                      style: "decimal",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}{" "}
+                    VNĐ
+                  </p>
+                  <p className="w-1/2 text-xl">
+                    <span className="text-xl font-bold">Tổng thanh toán:</span>{" "}
+                    {primaryPrice.toLocaleString("en-US", {
+                      style: "decimal",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}{" "}
+                    VNĐ
+                  </p>
+                </div>
+                <p className="w-full text-xl">
+                  <span className="text-xl font-bold">Trạng thái:</span>{" "}
+                  {status}
+                </p>
+                <p className="w-full text-2xl font-bold text-center">
+                  Chi tiết đơn hàng
+                </p>
+                <Table aria-label="Orders Table">
+                  <TableHeader>
+                    <TableColumn className="text-2xl">Tên sản phẩm</TableColumn>
+                    <TableColumn className="text-2xl">Đơn giá</TableColumn>
+                    <TableColumn className="text-2xl">Số lượng</TableColumn>
+                    <TableColumn className="text-2xl">Thành tiền</TableColumn>
+                  </TableHeader>
+                  <TableBody>
+                    {orderDetail.map((detail) => (
+                      <TableRow key={detail.id}>
+                        <TableCell className="text-xl">
+                          {detail.product.name}
+                        </TableCell>
+                        <TableCell className="text-xl">
+                          {detail.product.cost.toLocaleString("en-US", {
+                            style: "decimal",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}{" "}
+                          VNĐ
+                        </TableCell>
+                        <TableCell className="text-xl">
+                          {detail.quantity}
+                        </TableCell>
+                        <TableCell className="text-xl">
+                          {detail.productCost.toLocaleString("en-US", {
+                            style: "decimal",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}{" "}
+                          VNĐ
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="success"
+                  onPress={() => {
+                    setOpenDetail(false);
+                    setOrderDetail([]);
+                    setUser({});
+                    setPromotion("");
+                    setStatus("");
+                    setPrimaryPrice(0);
+                    setTotal(0);
+                  }}
+                >
+                  Đóng
+                </Button>
+              </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
