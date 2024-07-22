@@ -5,7 +5,6 @@ import { Card, CardBody } from "reactstrap";
 import { addToCart } from "src/app/feature/cart/CartSlice";
 
 export const ProductCard = ({ product }) => {
-  const imageUrl = "src/assets/image/o2.jpg"; // Default image URL
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,7 +22,7 @@ export const ProductCard = ({ product }) => {
       <div className="relative overflow-hidden group">
         <img 
           alt="Product" 
-          src={imageUrl} 
+          src={product.imgUrl} 
           className="w-full h-[310px] object-cover" 
         />
         <div

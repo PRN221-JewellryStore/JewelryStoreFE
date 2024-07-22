@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { axiosClient } from "src/axios/AxiosClient";
 import { useDispatch } from "react-redux";
 import { addToCart } from "src/app/feature/cart/CartSlice";
-import imageUrl from "src/assets/image/o2.jpg";
 import { Button } from "@nextui-org/button";
 
 const renderTab = (tab) => {
@@ -86,7 +85,7 @@ export const ProductDetailPage = () => {
       <div className="container mx-auto py-16">
         <div className="flex flex-col lg:flex-row">
           <div className="w-full lg:w-1/2">
-            <img className="img-fluid" src={imageUrl} />
+            <img className="img-fluid" src={product.imgUrl} />
           </div>
           <div className="w-full lg:w-1/2 mt-6 lg:mt-0 lg:pl-10">
             <h3 className="text-2xl font-medium text-gray-900 mb-4">

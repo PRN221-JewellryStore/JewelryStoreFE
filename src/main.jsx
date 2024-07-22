@@ -17,6 +17,9 @@ import { ProductDetailPage } from "./components/pages/ProductDetailPage";
 import { CartPage } from "./components/pages/CartPage";
 import { ShopCategoryPage } from "./components/pages/ShopCategoryPage";
 import { PrivateRoute } from "./components/pages/PrivateRoute";
+import { CheckoutPage } from "./components/pages/CheckOutPage/CheckoutPage";
+import PaymentSuccess from "./components/pages/PaymentStatus/PaymentSuccess";
+import PaymentFail from "./components/pages/PaymentStatus/PaymentFail";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -34,7 +37,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           />
           <Route path="shop-category" element={<ShopCategoryPage />} />
           <Route path="/" element={<PrivateRoute />}>
-            
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="payment-success" element={<PaymentSuccess />} />
+            <Route path="payment-fail" element={<PaymentFail />} />
           </Route>
           <Route path="cart" element={<CartPage />} />
           <Route path="*" element={<NotFound />} />

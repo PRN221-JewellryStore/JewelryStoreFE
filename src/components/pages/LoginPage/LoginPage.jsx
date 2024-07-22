@@ -25,7 +25,7 @@ export const LoginPage = () => {
     try {
       const response = await axiosClient.post("/User/login", formData);
       const { token, ...account } = response;
-      sessionStorage.setItem("token", token); // Ensure token is saved
+      localStorage.setItem("token", token); // Save token to localStorage if Remember Me is checked
       dispatch(setLoggedInAccount(account));
       navigate("/home");
       toast.success("Login success!");
@@ -85,11 +85,8 @@ export const LoginPage = () => {
             <div className="relative w-full max-w-sm mb-4 ml-8 flex items-center">
               <Checkbox
                 id="rememberMe"
-                defaultSelected
                 className="mr-1"
-                onChange={(e) =>
-                  handleDataChange("isRemember", e.target.checked)
-                }
+                onChange={(e) => handleDataChange("isRemember", e.target.checked)}
               />
               <label htmlFor="rememberMe" className="text-gray-700 mb-1">
                 Remember Me

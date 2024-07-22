@@ -18,6 +18,8 @@ export const AccountSlice = createSlice({
     },
     logout(state) {
       state.loggedIn = initialState.loggedIn;
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
     },
   },
 });

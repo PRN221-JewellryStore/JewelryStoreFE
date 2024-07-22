@@ -2,6 +2,11 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { accountReducer } from "./feature/account/AccountSlice";
 import { cartReducer } from "./feature/cart/CartSlice";
 
+// Function to load token from localStorage or sessionStorage
+const loadToken = () => {
+  return localStorage.getItem("token") || sessionStorage.getItem("token");
+};
+
 // Function to load state from localStorage
 const loadState = () => {
   try {
@@ -9,7 +14,12 @@ const loadState = () => {
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    const state = JSON.parse(serializedState);
+    const token = loadToken();
+    if (token) {
+      state.account = { ...state.account, token }; // Add token to account state
+    }
+    return state;
   } catch (err) {
     console.error("Could not load state from localStorage", err);
     return undefined;
