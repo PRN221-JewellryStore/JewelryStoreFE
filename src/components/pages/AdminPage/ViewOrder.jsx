@@ -60,10 +60,10 @@ const ViewOrder = () => {
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
               <BreadcrumbItem className="text-inherit text-2xl">
-                Manage
+                Quản lý
               </BreadcrumbItem>
               <BreadcrumbItem className="text-inherit text-2xl">
-                Orders
+                Đơn hàng
               </BreadcrumbItem>
             </Breadcrumbs>
           </div>
@@ -147,7 +147,7 @@ const ViewOrder = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={3}
+                total={Math.ceil(orders.length / 8)}
                 initialPage={page}
                 onChange={(newPage) => setPage(newPage)}
               />

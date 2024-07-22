@@ -1,4 +1,4 @@
-import { faAdd, faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   BreadcrumbItem,
@@ -8,7 +8,6 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Chip,
   Input,
   Modal,
   ModalBody,
@@ -78,7 +77,7 @@ const CategoryManagement = () => {
   const handleAddCate = async () => {
     try {
       await createCategory(name);
-      setMess("Add category successfully !!!");
+      setMess("Thêm thành công !!!");
       modalClose();
       fetchData();
     } catch (error) {
@@ -89,7 +88,7 @@ const CategoryManagement = () => {
   const handleEditCate = async () => {
     try {
       await updateCategory(id, name);
-      setMess("Add category successfully !!!");
+      setMess("Đã lưu thông tin!!!");
       modalClose();
       fetchData();
     } catch (error) {
@@ -108,10 +107,10 @@ const CategoryManagement = () => {
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
               <BreadcrumbItem className="text-inherit text-2xl">
-                Manage
+                Quản lý
               </BreadcrumbItem>
               <BreadcrumbItem className="text-inherit text-2xl">
-                Category
+                Danh mục
               </BreadcrumbItem>
             </Breadcrumbs>
           </div>
@@ -121,7 +120,7 @@ const CategoryManagement = () => {
             <CardHeader className="p-0 flex flex-row justify-center">
               <div className="rounded-md bg-sky-500 w-3/4 p-4 mt-[-4rem]">
                 <p className="text-center pl-4 text-4xl text-bold">
-                  Category Management
+                  Quản lý danh mục
                 </p>
               </div>
             </CardHeader>
@@ -133,15 +132,14 @@ const CategoryManagement = () => {
                   setIsOpen(true);
                 }}
               >
-                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> New
-                Category
+                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> Thêm
+                mới
               </Button>
               <div className="w-full flex justify-center">
                 <Table aria-label="Users Table" className="w-3/4">
                   <TableHeader>
-                    <TableColumn className="text-2xl">Id</TableColumn>
-                    <TableColumn className="text-2xl">Name</TableColumn>
-                    <TableColumn className="text-2xl">Status</TableColumn>
+                    <TableColumn className="text-2xl">STT</TableColumn>
+                    <TableColumn className="text-2xl">Tên danh mục</TableColumn>
                     <TableColumn></TableColumn>
                   </TableHeader>
                   {categories.length == 0 ? (
@@ -160,13 +158,6 @@ const CategoryManagement = () => {
                             <TableCell className="text-2xl">
                               {cate.name}
                             </TableCell>
-                            <TableCell className="text-2xl">
-                              {cate.deletedAt == null ? (
-                                <Chip color="success">On-Sell</Chip>
-                              ) : (
-                                <Chip color="danger">Removed</Chip>
-                              )}
-                            </TableCell>
                             <TableCell>
                               <Button
                                 className="w-1/6 bg-yellow-500 text-white"
@@ -178,7 +169,7 @@ const CategoryManagement = () => {
                                   className="text-white-500"
                                 />
                               </Button>
-                              {cate.deletedAt == null && (
+                              {/* {cate.deletedAt == null && (
                                 <Button
                                   className="w-1/6 bg-red-500 text-white"
                                   aria-label="remove"
@@ -192,7 +183,7 @@ const CategoryManagement = () => {
                                     className="text-white-500"
                                   />
                                 </Button>
-                              )}
+                              )} */}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -216,9 +207,7 @@ const CategoryManagement = () => {
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {isEdit
-                ? "Edit Category Information"
-                : "Add Category Information"}
+              {isEdit ? "Sửa thông tin" : "Thêm mới"}
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-row justify-center">
@@ -237,7 +226,7 @@ const CategoryManagement = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Name"
+                    label="Ten danh mục"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full p-4"
@@ -254,7 +243,7 @@ const CategoryManagement = () => {
                 color="success"
                 onPress={isEdit ? handleEditCate : handleAddCate}
               >
-                {isEdit ? "Save" : "Create"}
+                {isEdit ? "Lưu" : "Tạo"}
               </Button>
             </ModalFooter>
           </>
@@ -264,14 +253,10 @@ const CategoryManagement = () => {
       <Modal size="2xl" isOpen={isConfirm} onClose={() => setIsConfirm(false)}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Remove Jewelry
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Xác nhận</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
-                <p className="text-4xl">
-                  Are you sure to delete this category?
-                </p>
+                <p className="text-4xl">Xóa danh mục này?</p>
               </div>
             </ModalBody>
             <ModalFooter>
@@ -283,7 +268,7 @@ const CategoryManagement = () => {
                   setId(0);
                 }}
               >
-                No
+                Không
               </Button>
               <Button
                 color="success"
@@ -292,7 +277,7 @@ const CategoryManagement = () => {
                   setId(0);
                 }}
               >
-                Yes
+                Có
               </Button>
             </ModalFooter>
           </>
@@ -302,9 +287,7 @@ const CategoryManagement = () => {
       <Modal size="2xl" isOpen={mess != ""} onClose={() => setMess("")}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Notification
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Thông báo</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
                 <p className="text-4xl">{mess}</p>

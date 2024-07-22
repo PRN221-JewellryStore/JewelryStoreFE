@@ -1,5 +1,14 @@
 import { Link } from "@nextui-org/react";
 import { useLocation } from "react-router-dom";
+import {
+  faChartColumn,
+  faUser,
+  faRing,
+  faList,
+  faTicket,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -26,7 +35,11 @@ const Sidebar = () => {
               <b
                 className={pathname === "/admin" ? "text-white" : "text-black"}
               >
-                Dashboard
+                <FontAwesomeIcon
+                  icon={faChartColumn}
+                  className="text-white-500"
+                />{" "}
+                Thống kê
               </b>
             </div>
           </Link>
@@ -45,7 +58,8 @@ const Sidebar = () => {
                     : "text-black"
                 }
               >
-                User Management
+                <FontAwesomeIcon icon={faUser} className="text-white-500" />{" "}
+                Người dùng
               </b>
             </div>
           </Link>
@@ -64,7 +78,8 @@ const Sidebar = () => {
                     : "text-black"
                 }
               >
-                Jewelry Management
+                <FontAwesomeIcon icon={faRing} className="text-white-500" />{" "}
+                Trang sức
               </b>
             </div>
           </Link>
@@ -72,7 +87,7 @@ const Sidebar = () => {
         <li className="w-full">
           <Link className="menu-title w-full" href="/admin/category-manage">
             <div
-              className={`h-16 w-full flex items-center pl-4 text-inherit text-xl rounded-lg ${
+              className={`h-16 w-full flex items-center pl-4 text-inherit text-2xl rounded-lg ${
                 pathname === "/admin/category-manage" ? "bg-black" : ""
               }`}
             >
@@ -83,7 +98,8 @@ const Sidebar = () => {
                     : "text-black"
                 }
               >
-                Category Management
+                <FontAwesomeIcon icon={faList} className="text-white-500" />{" "}
+                Danh mục
               </b>
             </div>
           </Link>
@@ -91,7 +107,7 @@ const Sidebar = () => {
         <li className="w-full">
           <Link className="menu-title w-full" href="/admin/promotion-manage">
             <div
-              className={`h-16 w-full flex items-center pl-4 text-inherit text-xl rounded-lg ${
+              className={`h-16 w-full flex items-center pl-4 text-inherit text-2xl rounded-lg ${
                 pathname === "/admin/promotion-manage" ? "bg-black" : ""
               }`}
             >
@@ -102,7 +118,8 @@ const Sidebar = () => {
                     : "text-black"
                 }
               >
-                Promotion Management
+                <FontAwesomeIcon icon={faTicket} className="text-white-500" />{" "}
+                Ưu đãi
               </b>
             </div>
           </Link>
@@ -110,7 +127,7 @@ const Sidebar = () => {
         <li className="w-full">
           <Link className="menu-title w-full" href="/admin/view-order">
             <div
-              className={`h-16 w-full flex items-center pl-4 text-inherit text-xl rounded-lg ${
+              className={`h-16 w-full flex items-center pl-4 text-inherit text-2xl rounded-lg ${
                 pathname === "/admin/view-order" ? "bg-black" : ""
               }`}
             >
@@ -119,7 +136,11 @@ const Sidebar = () => {
                   pathname === "/admin/view-order" ? "text-white" : "text-black"
                 }
               >
-                View Order
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  className="text-white-500"
+                />{" "}
+                Đơn hàng
               </b>
             </div>
           </Link>

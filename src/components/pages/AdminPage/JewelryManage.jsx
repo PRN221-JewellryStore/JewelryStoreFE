@@ -8,7 +8,6 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Chip,
   Input,
   Modal,
   ModalBody,
@@ -42,12 +41,14 @@ const JewelryManage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [categoryId, setCategoryId] = useState(1);
+  //const [categoryName, setCategoryName] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [weight, setWeight] = useState(0);
   const [cost, setCost] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedCate, setSelectedCate] = useState(0);
   const [isConfirm, setIsConfirm] = useState(false);
   const [mess, setMess] = useState("");
   const [page, setPage] = useState(1);
@@ -67,6 +68,7 @@ const JewelryManage = () => {
       setJewwelries([...response]);
       const res = await getAllCategories();
       setCategories([...res]);
+      //setCategoryName(res[0]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -90,23 +92,24 @@ const JewelryManage = () => {
           description,
           name,
           Number(categoryId)
+          //categoryName
         );
-        setMess("Add product successfully !!!");
+        setMess("Thêm thành công !!!");
         setIsOpen(false);
         fetchData();
       } catch (error) {
         console.error("Error add product:", error);
       }
     } else if (description === "") {
-      setErr("Please type description");
+      setErr("Nhập mô tả");
     } else if (name === "") {
-      setErr("Please type name");
+      setErr("Nhập tên trang sức");
     } else if (cost <= 0) {
-      setErr("Cost must be large than 0");
+      setErr("Đơn giá phải lớn hơn 0");
     } else if (weight <= 0) {
-      setErr("Weight must be large than 0");
+      setErr("Khối lượng phải lớn hơn 0");
     } else if (quantity <= 0) {
-      setErr("Quantity must be large than 0");
+      setErr("Số lượng phải lớn hơn 0");
     }
   };
 
@@ -131,7 +134,8 @@ const JewelryManage = () => {
     setWeight(0);
     setDescription("");
     setName("");
-    setCategoryId();
+    setCategoryId(1);
+    //setCategoryName(categories[0]?.name);
     setErr("");
   };
 
@@ -154,15 +158,15 @@ const JewelryManage = () => {
         console.error("Error edit product:", error);
       }
     } else if (description === "") {
-      setErr("Please type description");
+      setErr("Nhập mô tả");
     } else if (name === "") {
-      setErr("Please type name");
+      setErr("Nhập tên trang sức");
     } else if (cost <= 0) {
-      setErr("Cost must be large than 0");
+      setErr("Đơn giá phải lớn hơn 0");
     } else if (weight <= 0) {
-      setErr("Weight must be large than 0");
+      setErr("Khối lượng phải lớn hơn 0");
     } else if (quantity <= 0) {
-      setErr("Quantity must be large than 0");
+      setErr("Số lượng phải lớn hơn 0");
     }
   };
 
@@ -189,10 +193,10 @@ const JewelryManage = () => {
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
               <BreadcrumbItem className="text-inherit text-2xl">
-                Manage
+                Quản lý
               </BreadcrumbItem>
               <BreadcrumbItem className="text-inherit text-2xl">
-                Jewelries
+                Trang sức
               </BreadcrumbItem>
             </Breadcrumbs>
           </div>
@@ -202,37 +206,49 @@ const JewelryManage = () => {
             <CardHeader className="p-0 flex flex-row justify-center">
               <div className="rounded-md bg-sky-500 w-3/4 p-4 mt-[-4rem]">
                 <p className="text-center pl-4 text-4xl text-bold">
-                  Jewelries Management
+                  Quản lý trang sức
                 </p>
               </div>
             </CardHeader>
             <CardBody>
-              <Button
-                className="w-1/6 bg-green-500 text-white text-2xl"
-                aria-label="add"
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> New
-                Jewelry
-              </Button>
+              <div className="w-full flex flex-row">
+                <div className="flex justify-center items-center">
+                  <Button
+                    className="w-full bg-green-500 text-white text-2xl"
+                    aria-label="add"
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faAdd} className="text-white-500" />{" "}
+                    Thêm mới
+                  </Button>
+                </div>
+                <Select
+                  label="Danh mục"
+                  defaultSelectedKeys={[String(selectedCate)]}
+                  onChange={(e) => setSelectedCate(e.target.value)}
+                  className="w-1/4 p-4"
+                >
+                  <SelectItem key={0}>Tất cả</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id}>{category.name}</SelectItem>
+                  ))}
+                </Select>
+              </div>
               <Table aria-label="Users Table">
                 <TableHeader>
-                  <TableColumn className="text-2xl">Name</TableColumn>
-                  <TableColumn className="text-2xl">Description</TableColumn>
-                  <TableColumn className="text-2xl">Category</TableColumn>
-                  <TableColumn className="text-2xl">Weight</TableColumn>
-                  <TableColumn className="text-2xl">Quantity</TableColumn>
-                  <TableColumn className="text-2xl">Cost</TableColumn>
-                  <TableColumn className="text-2xl">Status</TableColumn>
+                  <TableColumn className="text-2xl">Tên trang sức</TableColumn>
+                  <TableColumn className="text-2xl">Mô tả</TableColumn>
+                  <TableColumn className="text-2xl">Danh mục</TableColumn>
+                  <TableColumn className="text-2xl">Khối lượng</TableColumn>
+                  <TableColumn className="text-2xl">Số lượng</TableColumn>
+                  <TableColumn className="text-2xl">Đơn giá</TableColumn>
                   <TableColumn></TableColumn>
                 </TableHeader>
                 {jewelries.length == 0 ? (
-                  <TableBody emptyContent={"No data to display."}>
-                    {[]}
-                  </TableBody>
-                ) : (
+                  <TableBody emptyContent={"Không có dữ liệu."}>{[]}</TableBody>
+                ) : selectedCate == 0 ? (
                   <TableBody>
                     {jewelries
                       .slice((page - 1) * 8, page * 8)
@@ -261,12 +277,65 @@ const JewelryManage = () => {
                             })}{" "}
                             VNĐ
                           </TableCell>
-                          <TableCell className="text-2xl">
-                            {jewelry.deletedAt == null ? (
-                              <Chip color="success">On-Sell</Chip>
-                            ) : (
-                              <Chip color="danger">Removed</Chip>
+                          <TableCell>
+                            <Button
+                              className="w-1/6 bg-yellow-500 text-white"
+                              aria-label="edit"
+                              onClick={() => modalEditOpen(jewelry)}
+                            >
+                              <FontAwesomeIcon
+                                icon={faEdit}
+                                className="text-white-500"
+                              />
+                            </Button>
+                            {jewelry.deletedAt == null && (
+                              <Button
+                                className="w-1/6 bg-red-500 text-white"
+                                aria-label="remove"
+                                onClick={() => {
+                                  setIsConfirm(true);
+                                  setSelectedProduct(jewelry.id);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faRemove}
+                                  className="text-white-500"
+                                />
+                              </Button>
                             )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                ) : (
+                  <TableBody>
+                    {jewelries
+                      .filter((jewelry) => jewelry.categoryID == selectedCate)
+                      .slice((page - 1) * 8, page * 8)
+                      .map((jewelry) => (
+                        <TableRow key={jewelry.id}>
+                          <TableCell className="text-2xl">
+                            {jewelry.name}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.description}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.category.name}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.weight}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.quantity}
+                          </TableCell>
+                          <TableCell className="text-2xl">
+                            {jewelry.cost.toLocaleString("en-US", {
+                              style: "decimal",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}{" "}
+                            VNĐ
                           </TableCell>
                           <TableCell>
                             <Button
@@ -302,12 +371,25 @@ const JewelryManage = () => {
               </Table>
             </CardBody>
             <CardFooter>
-              <Pagination
-                showControls
-                total={Math.ceil(jewelries.length / 8)}
-                initialPage={page}
-                onChange={(newPage) => setPage(newPage)}
-              />
+              {selectedCate == 0 ? (
+                <Pagination
+                  showControls
+                  total={Math.ceil(jewelries.length / 8)}
+                  initialPage={page}
+                  onChange={(newPage) => setPage(newPage)}
+                />
+              ) : (
+                <Pagination
+                  showControls
+                  total={Math.ceil(
+                    jewelries.filter(
+                      (jewelry) => jewelry.categoryID == selectedCate
+                    ).length / 8
+                  )}
+                  initialPage={page}
+                  onChange={(newPage) => setPage(newPage)}
+                />
+              )}
             </CardFooter>
           </Card>
         </div>
@@ -316,7 +398,7 @@ const JewelryManage = () => {
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {isEdit ? "Edit Jewelry Information" : "Add Jewelry Information"}
+              {isEdit ? "Chỉnh sửa thông tin" : "Thêm mới"}
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-row justify-center">
@@ -332,9 +414,16 @@ const JewelryManage = () => {
                 <div className="w-3/5">
                   <Select
                     required
-                    label="Jewelry Category"
+                    label="Danh mục"
                     defaultSelectedKeys={[String(categoryId)]}
-                    onChange={(e) => setCategoryId(e.target.value)}
+                    onChange={(e) => {
+                      setCategoryId(e.target.value);
+                      // setCategoryName(
+                      //   categories.filter(
+                      //     (cate) => cate.id == e.target.value
+                      //   )[0]?.name
+                      // );
+                    }}
                     className="w-full p-4"
                   >
                     {categories.map((category) => (
@@ -344,7 +433,7 @@ const JewelryManage = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Name"
+                    label="Tên trang sức"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full p-4"
@@ -352,7 +441,7 @@ const JewelryManage = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Description"
+                    label="Mô tả"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full p-4"
@@ -360,7 +449,7 @@ const JewelryManage = () => {
                   <Input
                     isRequired
                     type="number"
-                    label="Cost"
+                    label="Đơn giá"
                     value={cost}
                     onChange={(e) => setCost(e.target.value)}
                     className="w-full p-4"
@@ -368,7 +457,7 @@ const JewelryManage = () => {
                   <Input
                     isRequired
                     type="number"
-                    label="Weight"
+                    label="Khối lượng"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
                     className="w-full p-4"
@@ -376,7 +465,7 @@ const JewelryManage = () => {
                   <Input
                     isRequired
                     type="number"
-                    label="Quantity"
+                    label="Số lượng"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     className="w-full p-4"
@@ -393,7 +482,7 @@ const JewelryManage = () => {
                 color="success"
                 onPress={isEdit ? handleEditProduct : handleAddProduct}
               >
-                {isEdit ? "Save" : "Create"}
+                {isEdit ? "Lưu" : "Thêm"}
               </Button>
             </ModalFooter>
           </>
@@ -403,12 +492,10 @@ const JewelryManage = () => {
       <Modal size="2xl" isOpen={isConfirm} onClose={() => setIsConfirm(false)}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Remove Jewelry
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Xác nhận</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
-                <p className="text-4xl">Are you sure to delete this jewelry?</p>
+                <p className="text-4xl">Xóa trang sức này?</p>
               </div>
             </ModalBody>
             <ModalFooter>
@@ -420,10 +507,10 @@ const JewelryManage = () => {
                   setSelectedProduct({});
                 }}
               >
-                No
+                Không
               </Button>
               <Button color="success" onPress={() => handleDeleteProduct()}>
-                Yes
+                Có
               </Button>
             </ModalFooter>
           </>
@@ -433,9 +520,7 @@ const JewelryManage = () => {
       <Modal size="2xl" isOpen={mess != ""} onClose={() => setMess("")}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Notification
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Thông báo</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
                 <p className="text-4xl">{mess}</p>

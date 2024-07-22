@@ -99,23 +99,23 @@ const UserManage = () => {
         point,
         Number(roleID)
       );
-      setMess("Update successfull!!");
+      setMess("Cập nhật thành công!!");
       modalClose();
       fetchData();
     } catch (error) {
-      console.error("Error update user:", error);
+      console.error("Lỗi:", error);
     }
   };
 
   const handleDeleteUser = async () => {
     try {
       await deleteUser(selectedUser);
-      setMess("Delete successful !!");
+      setMess("Xóa thành công !!");
       setSelectedUser("");
       setIsConfirm(false);
       fetchData();
     } catch (error) {
-      console.error("Error delete user:", error);
+      console.error("Lỗi:", error);
     }
   };
 
@@ -130,10 +130,10 @@ const UserManage = () => {
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
               <BreadcrumbItem className="text-inherit text-2xl">
-                Manage
+                Quản lý
               </BreadcrumbItem>
               <BreadcrumbItem className="text-inherit text-2xl">
-                Users
+                Người dùng
               </BreadcrumbItem>
             </Breadcrumbs>
           </div>
@@ -143,18 +143,18 @@ const UserManage = () => {
             <CardHeader className="p-0 flex flex-row justify-center">
               <div className="rounded-md bg-sky-500 w-3/4 p-4 mt-[-4rem]">
                 <p className="text-center pl-4 text-4xl text-bold">
-                  User Management
+                  Quản lý người dùng
                 </p>
               </div>
             </CardHeader>
             <CardBody>
               <Table aria-label="Users Table">
                 <TableHeader>
-                  <TableColumn className="text-2xl">Full name</TableColumn>
+                  <TableColumn className="text-2xl">Họ tên</TableColumn>
                   <TableColumn className="text-2xl">Email</TableColumn>
-                  <TableColumn className="text-2xl">Phone</TableColumn>
-                  <TableColumn className="text-2xl">Address</TableColumn>
-                  <TableColumn className="text-2xl">Role</TableColumn>
+                  <TableColumn className="text-2xl">SĐT</TableColumn>
+                  <TableColumn className="text-2xl">Địa chỉ</TableColumn>
+                  <TableColumn className="text-2xl">Vai trò</TableColumn>
                   <TableColumn></TableColumn>
                 </TableHeader>
                 {users.length == 0 ? (
@@ -245,7 +245,9 @@ const UserManage = () => {
       <Modal size="3xl" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">Edit User</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">
+              Chỉnh sửa thông tin
+            </ModalHeader>
             <ModalBody>
               <div className="flex flex-row justify-center">
                 {/* <div className="w-2/5 flex justify-center items-start">
@@ -261,7 +263,7 @@ const UserManage = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Username"
+                    label="Tên đăng nhập"
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                     className="w-full p-4"
@@ -277,7 +279,7 @@ const UserManage = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Full Name"
+                    label="Họ tên"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     className="w-full p-4"
@@ -293,7 +295,7 @@ const UserManage = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Phone number"
+                    label="Số điện thoại"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full p-4"
@@ -301,14 +303,14 @@ const UserManage = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Address"
+                    label="Địa chỉ"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     className="w-full p-4"
                   />
                   <Select
                     required
-                    label="Role"
+                    label="Vai trò"
                     defaultSelectedKeys={[String(roleID)]}
                     onChange={(e) => setRoleID(e.target.value)}
                     className="w-full p-4"
@@ -327,10 +329,10 @@ const UserManage = () => {
                 variant="light"
                 onPress={() => modalClose()}
               >
-                Close
+                Đóng
               </Button>
               <Button color="success" onPress={() => handleUpdateUser()}>
-                Save
+                Lưu
               </Button>
             </ModalFooter>
           </>
@@ -352,7 +354,7 @@ const UserManage = () => {
             </ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
-                <p className="text-4xl">Are you sure to delete this user?</p>
+                <p className="text-4xl">Xóa người dùng?</p>
               </div>
             </ModalBody>
             <ModalFooter>
@@ -364,10 +366,10 @@ const UserManage = () => {
                   setSelectedUser("");
                 }}
               >
-                No
+                Không
               </Button>
               <Button color="success" onPress={() => handleDeleteUser()}>
-                Yes
+                Có
               </Button>
             </ModalFooter>
           </>
@@ -377,9 +379,7 @@ const UserManage = () => {
       <Modal size="3xl" isOpen={mess != ""} onClose={() => setMess("")}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Notification
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Thông báo</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
                 <p className="text-4xl">{mess}</p>

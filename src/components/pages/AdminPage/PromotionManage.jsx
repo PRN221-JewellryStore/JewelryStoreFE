@@ -61,7 +61,7 @@ const PromotionManagement = () => {
       const res = await getAllPromotions();
       setPromotions([...res]);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Lỗi:", error);
     }
   };
 
@@ -89,46 +89,46 @@ const PromotionManagement = () => {
 
   const handleAddPromotion = async () => {
     if (description == "") {
-      setErr("Please type description");
+      setErr("Nhập mô tả");
     } else if (condition <= 0) {
-      setErr("Condition must be larger than 0");
+      setErr("Điều kiện dùng phải lớn hơn 0");
     } else if (reduce <= 0) {
-      setErr("Reduce percent must be larger than 0");
+      setErr("Tỷ lệ giảm phải lớn hơn 0");
     } else if (max <= 0) {
-      setErr("Max reduce must be larger than 0");
+      setErr("Số tiền giảm tối đa phải lớn hơn 0");
     } else if (expire == "") {
-      setErr("Choose expire date");
+      setErr("Chọn thời gian hết hạn");
     } else {
       try {
         await createPromotion(description, condition, reduce, max, expire);
-        setMess("Add promotion successfully !!!");
+        setMess("Thêm thành công !!!");
         modalClose();
         fetchData();
       } catch (error) {
-        console.error("Error add promotion:", error);
+        console.error("Lỗi:", error);
       }
     }
   };
 
   const handleUpdatePromotion = async () => {
     if (description == "") {
-      setErr("Please type description");
+      setErr("Nhập mô tả");
     } else if (condition <= 0) {
-      setErr("Condition must be larger than 0");
+      setErr("Điều kiện dùng phải lớn hơn 0");
     } else if (reduce <= 0) {
-      setErr("Reduce percent must be larger than 0");
+      setErr("Tỷ lệ giảm phải lớn hơn 0");
     } else if (max <= 0) {
-      setErr("Max reduce must be larger than 0");
+      setErr("Số tiền giảm tối đa phải lớn hơn 0");
     } else if (expire == "") {
-      setErr("Choose expire date");
+      setErr("Chọn thời gian hết hạn");
     } else {
       try {
         await updatePromotion(id, description, condition, reduce, max, expire);
-        setMess("Update promotion successfully !!!");
+        setMess("Đã cập nhật!!!");
         modalClose();
         fetchData();
       } catch (error) {
-        console.error("Error update promotion:", error);
+        console.error("Lỗi:", error);
       }
     }
   };
@@ -136,12 +136,12 @@ const PromotionManagement = () => {
   const handleRemovePromotion = async () => {
     try {
       await removePromotion(id);
-      setMess("Remove promotion successfully !!!");
+      setMess("Đã xóa!!!");
       setId("");
       setIsConfirm(false);
       fetchData();
     } catch (error) {
-      console.error("Error delete promotion:", error);
+      console.error("Lỗi:", error);
     }
   };
 
@@ -156,10 +156,10 @@ const PromotionManagement = () => {
           <div className="flex flex-col flex-wrap gap-4">
             <Breadcrumbs key="solid" variant="solid" size="lg">
               <BreadcrumbItem className="text-inherit text-2xl">
-                Manage
+                Quản lý
               </BreadcrumbItem>
               <BreadcrumbItem className="text-inherit text-2xl">
-                Promotion
+                CT Khuyến mãi
               </BreadcrumbItem>
             </Breadcrumbs>
           </div>
@@ -169,7 +169,7 @@ const PromotionManagement = () => {
             <CardHeader className="p-0 flex flex-row justify-center">
               <div className="rounded-md bg-sky-500 w-3/4 p-4 mt-[-4rem]">
                 <p className="text-center pl-4 text-4xl text-bold">
-                  Promotion Management
+                  Quản lý Chương trình khuyến mãi
                 </p>
               </div>
             </CardHeader>
@@ -181,25 +181,25 @@ const PromotionManagement = () => {
                   setIsOpen(true);
                 }}
               >
-                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> New
-                Promotion
+                <FontAwesomeIcon icon={faAdd} className="text-white-500" /> Thêm
+                mới
               </Button>
               <Table aria-label="Users Table">
                 <TableHeader>
-                  <TableColumn className="text-2xl">Description</TableColumn>
+                  <TableColumn className="text-2xl">Mô tả</TableColumn>
+                  <TableColumn className="text-2xl">Điều kiện dùng</TableColumn>
+                  <TableColumn className="text-2xl">Tỷ lệ giảm</TableColumn>
                   <TableColumn className="text-2xl">
-                    Condition to use
+                    Tiền giảm tối đa
                   </TableColumn>
-                  <TableColumn className="text-2xl">Reduce percent</TableColumn>
-                  <TableColumn className="text-2xl">Max reduce</TableColumn>
-                  <TableColumn className="text-2xl">Exprire time</TableColumn>
-                  <TableColumn className="text-2xl">Status</TableColumn>
+                  <TableColumn className="text-2xl">
+                    Thời gian hết hạn
+                  </TableColumn>
+                  <TableColumn className="text-2xl">Trạng thái</TableColumn>
                   <TableColumn></TableColumn>
                 </TableHeader>
                 {promotions.length == 0 ? (
-                  <TableBody emptyContent={"No data to display."}>
-                    {[]}
-                  </TableBody>
+                  <TableBody emptyContent={"Không có dữ liệu."}>{[]}</TableBody>
                 ) : (
                   <TableBody>
                     {promotions
@@ -280,9 +280,7 @@ const PromotionManagement = () => {
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {isEdit
-                ? "Edit Promotion Information"
-                : "Add Promotion Information"}
+              {isEdit ? "Chỉnh sửa thông tin" : "Thêm mới"}
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-row justify-center">
@@ -290,7 +288,7 @@ const PromotionManagement = () => {
                   <Input
                     isRequired
                     type="text"
-                    label="Description"
+                    label="Mô tả"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full p-4"
@@ -298,7 +296,7 @@ const PromotionManagement = () => {
                   <Input
                     isRequired
                     type="number"
-                    label="Condition"
+                    label="Điều kiện dùng"
                     value={condition}
                     onChange={(e) => setCondition(e.target.value)}
                     className="w-full p-4"
@@ -306,7 +304,7 @@ const PromotionManagement = () => {
                   <Input
                     isRequired
                     type="number"
-                    label="Reduce percent"
+                    label="Tỷ lệ giảm"
                     value={reduce}
                     onChange={(e) => setReduce(e.target.value)}
                     className="w-full p-4"
@@ -314,7 +312,7 @@ const PromotionManagement = () => {
                   <Input
                     isRequired
                     type="number"
-                    label="Max reduce"
+                    label="Giảm tối đa"
                     value={max}
                     onChange={(e) => setMax(e.target.value)}
                     className="w-full p-4"
@@ -331,7 +329,7 @@ const PromotionManagement = () => {
                   <Input
                     isRequired
                     type="datetime-local"
-                    label="Expire date"
+                    label="Thời gian hết hạn"
                     value={expire}
                     onChange={(e) => setExpire(e.target.value)}
                     className="w-full p-4"
@@ -348,7 +346,7 @@ const PromotionManagement = () => {
                 color="success"
                 onPress={isEdit ? handleUpdatePromotion : handleAddPromotion}
               >
-                {isEdit ? "Save" : "Create"}
+                {isEdit ? "Lưu" : "Tạo"}
               </Button>
             </ModalFooter>
           </>
@@ -358,14 +356,10 @@ const PromotionManagement = () => {
       <Modal size="2xl" isOpen={isConfirm} onClose={() => setIsConfirm(false)}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Remove Promotion
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Xác nhận</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
-                <p className="text-4xl">
-                  Are you sure to delete this promotion?
-                </p>
+                <p className="text-4xl">Xóa khuyến mãi?</p>
               </div>
             </ModalBody>
             <ModalFooter>
@@ -377,10 +371,10 @@ const PromotionManagement = () => {
                   setId(0);
                 }}
               >
-                No
+                Không
               </Button>
               <Button color="success" onPress={handleRemovePromotion}>
-                Yes
+                Có
               </Button>
             </ModalFooter>
           </>
@@ -390,9 +384,7 @@ const PromotionManagement = () => {
       <Modal size="2xl" isOpen={mess != ""} onClose={() => setMess("")}>
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Notification
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Thông báo</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
                 <p className="text-4xl">{mess}</p>

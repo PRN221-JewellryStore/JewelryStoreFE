@@ -26,6 +26,7 @@ export const createProduct = async (
   description,
   name,
   categoryID
+  //categoryName
 ) => {
   try {
     let newFormData = new FormData();
@@ -35,6 +36,8 @@ export const createProduct = async (
     newFormData.append("Description", description);
     newFormData.append("Name", name);
     newFormData.append("CategoryID", categoryID);
+    // newFormData.append("Category.ID", categoryID);
+    // newFormData.append("Category.Name", categoryName);
     const response = await axios.post(
       `${baseUrl}/api/Product/create`,
       newFormData
