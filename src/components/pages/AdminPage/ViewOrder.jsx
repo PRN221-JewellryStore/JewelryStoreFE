@@ -192,7 +192,7 @@ const ViewOrder = () => {
                 <div className="w-full text-xl flex">
                   <p className="w-1/2 text-xl">
                     <span className="text-xl font-bold">Tổng tiền:</span>{" "}
-                    {total.toLocaleString("en-US", {
+                    {primaryPrice.toLocaleString("en-US", {
                       style: "decimal",
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 0,
@@ -201,7 +201,7 @@ const ViewOrder = () => {
                   </p>
                   <p className="w-1/2 text-xl">
                     <span className="text-xl font-bold">Tổng thanh toán:</span>{" "}
-                    {primaryPrice.toLocaleString("en-US", {
+                    {total.toLocaleString("en-US", {
                       style: "decimal",
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 0,

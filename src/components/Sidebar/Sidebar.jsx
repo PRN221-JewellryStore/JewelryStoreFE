@@ -17,13 +17,15 @@ const Sidebar = () => {
       <hr className="horizontal light mt-0 mb-2" />
       <ul className="list-none mt-6">
         <li className="w-full">
-          <Link className="menu-title w-full" href="">
+          <Link className="menu-title w-full" href="/admin">
             <div
               className={`h-16 w-full flex items-center pl-4 text-inherit text-2xl rounded-lg ${
-                pathname === "" ? "bg-black" : ""
+                pathname === "/admin" ? "bg-black" : ""
               }`}
             >
-              <b className={pathname === "" ? "text-white" : "text-black"}>
+              <b
+                className={pathname === "/admin" ? "text-white" : "text-black"}
+              >
                 Dashboard
               </b>
             </div>
