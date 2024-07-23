@@ -20,6 +20,7 @@ import { PrivateRoute } from "./components/pages/PrivateRoute";
 import { CheckoutPage } from "./components/pages/CheckOutPage/CheckoutPage";
 import PaymentSuccess from "./components/pages/PaymentStatus/PaymentSuccess";
 import PaymentFail from "./components/pages/PaymentStatus/PaymentFail";
+import { CallbackPage } from "./components/pages/CallbackPage/CallbackPage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -40,6 +41,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="payment-success" element={<PaymentSuccess />} />
             <Route path="payment-fail" element={<PaymentFail />} />
+            <Route path="/payment-callback" element={<CallbackPage />} />
           </Route>
           <Route path="cart" element={<CartPage />} />
           <Route path="*" element={<NotFound />} />
