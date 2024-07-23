@@ -8,6 +8,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -54,6 +55,7 @@ const JewelryManage = () => {
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
   const [search, setSearch] = useState("");
+  const [img, setImg] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -123,6 +125,7 @@ const JewelryManage = () => {
     setWeight(product.weight);
     setDescription(product.description);
     setName(product.name);
+    setImg(product.imgUrl);
     setCategoryId(product.categoryID);
   };
 
@@ -136,6 +139,7 @@ const JewelryManage = () => {
     setDescription("");
     setName("");
     setCategoryId(1);
+    setImg("");
     //setCategoryName(categories[0]?.name);
     setErr("");
   };
@@ -180,6 +184,20 @@ const JewelryManage = () => {
       fetchData();
     } catch (error) {
       console.error("Error delete product:", error);
+    }
+  };
+
+  const handleCreateImageChange = (e) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file && file.type.substr(0, 5) === "image") {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Use a type assertion to tell TypeScript that reader.result will be a string
+        setImg(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImg("https://nextui-docs-v2.vercel.app/images/album-cover.png"); // Reset to default or placeholder if not an image
     }
   };
 
@@ -443,7 +461,7 @@ const JewelryManage = () => {
           </Card>
         </div>
       </div>
-      <Modal size="3xl" isOpen={isOpen} onClose={() => modalClose}>
+      <Modal size="4xl" isOpen={isOpen} onClose={() => modalClose}>
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
@@ -451,15 +469,21 @@ const JewelryManage = () => {
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-row justify-center">
-                {/* <div className="w-2/5 flex justify-center items-start">
+                <div className="w-2/5">
                   <Image
                     isBlurred
-                    width={240}
-                    src="https://nextui-docs-v2.vercel.app/images/album-cover.png"
+                    width={300}
+                    src={img}
                     alt="NextUI Album Cover"
                     className="m-5"
                   />
-                </div> */}
+                  <Input
+                    onChange={handleCreateImageChange}
+                    type="file"
+                    name="Images"
+                    accept="image/*"
+                  />
+                </div>
                 <div className="w-3/5">
                   <Select
                     required
