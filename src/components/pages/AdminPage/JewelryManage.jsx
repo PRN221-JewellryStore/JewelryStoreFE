@@ -55,7 +55,8 @@ const JewelryManage = () => {
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
   const [search, setSearch] = useState("");
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState(null);
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -94,7 +95,8 @@ const JewelryManage = () => {
           Number(quantity),
           description,
           name,
-          Number(categoryId)
+          Number(categoryId),
+          file
           //categoryName
         );
         setMess("Thêm thành công !!!");
@@ -154,7 +156,8 @@ const JewelryManage = () => {
           Number(quantity),
           description,
           name,
-          Number(categoryId)
+          Number(categoryId),
+          file
         );
         setMess("Edit product successfully !!!");
         setIsOpen(false);
@@ -190,14 +193,14 @@ const JewelryManage = () => {
   const handleCreateImageChange = (e) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (file && file.type.substr(0, 5) === "image") {
+      setFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        // Use a type assertion to tell TypeScript that reader.result will be a string
-        setImg(reader.result);
+        setImg(reader.result.toString());
       };
       reader.readAsDataURL(file);
     } else {
-      setImg("https://nextui-docs-v2.vercel.app/images/album-cover.png"); // Reset to default or placeholder if not an image
+      setImg("https://nextui-docs-v2.vercel.app/images/album-cover.png");
     }
   };
 
@@ -473,8 +476,12 @@ const JewelryManage = () => {
                   <Image
                     isBlurred
                     width={300}
-                    src={img}
-                    alt="NextUI Album Cover"
+                    src={
+                      img
+                        ? img
+                        : "https://nextui-docs-v2.vercel.app/images/album-cover.png"
+                    }
+                    alt="default"
                     className="m-5"
                   />
                   <Input

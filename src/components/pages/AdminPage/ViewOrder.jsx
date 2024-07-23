@@ -7,6 +7,7 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -218,6 +219,7 @@ const ViewOrder = () => {
                 </p>
                 <Table aria-label="Orders Table">
                   <TableHeader>
+                    <TableColumn className="text-2xl"></TableColumn>
                     <TableColumn className="text-2xl">Tên sản phẩm</TableColumn>
                     <TableColumn className="text-2xl">Đơn giá</TableColumn>
                     <TableColumn className="text-2xl">Số lượng</TableColumn>
@@ -226,6 +228,20 @@ const ViewOrder = () => {
                   <TableBody>
                     {orderDetail.map((detail) => (
                       <TableRow key={detail.id}>
+                        <TableCell className="text-xl">
+                          <Image
+                            isBlurred
+                            width={100}
+                            height={100}
+                            src={
+                              detail.product.imgUrl
+                                ? detail.product.imgUrl
+                                : "https://nextui-docs-v2.vercel.app/images/album-cover.png"
+                            }
+                            alt="default"
+                            className="m-5"
+                          />
+                        </TableCell>
                         <TableCell className="text-xl">
                           {detail.product.name}
                         </TableCell>
