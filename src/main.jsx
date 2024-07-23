@@ -21,6 +21,10 @@ import { CheckoutPage } from "./components/pages/CheckOutPage/CheckoutPage";
 import PaymentSuccess from "./components/pages/PaymentStatus/PaymentSuccess";
 import PaymentFail from "./components/pages/PaymentStatus/PaymentFail";
 import { CallbackPage } from "./components/pages/CallbackPage/CallbackPage";
+import CategoryManagement from "./components/pages/AdminPage/CategoryManage";
+import PromotionManagement from "./components/pages/AdminPage/PromotionManage";
+import ViewOrder from "./components/pages/AdminPage/ViewOrder";
+import Dashboard from "./components/pages/AdminPage/Dashboard";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -46,8 +50,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="cart" element={<CartPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/user-manage" element={<UserManage />} />
         <Route path="/admin/jewelry-manage" element={<JewelryManage />} />
+        <Route path="/admin/category-manage" element={<CategoryManagement />} />
+        <Route
+          path="/admin/promotion-manage"
+          element={<PromotionManagement />}
+        />
+        <Route path="/admin/view-order" element={<ViewOrder />} />
       </Routes>
     </BrowserRouter>
   </Provider>
