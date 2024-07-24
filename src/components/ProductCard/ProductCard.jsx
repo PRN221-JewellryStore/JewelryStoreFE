@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody } from "reactstrap";
 import { addToCart } from "src/app/feature/cart/CartSlice";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ export const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     dispatch(addToCart({ product, quantity: 1 }));
+    toast.success("Thêm hàng thành công!");
   };
 
   return (

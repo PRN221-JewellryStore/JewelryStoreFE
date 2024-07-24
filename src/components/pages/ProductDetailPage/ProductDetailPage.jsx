@@ -8,6 +8,8 @@ import { axiosClient } from "src/axios/AxiosClient";
 import { useDispatch } from "react-redux";
 import { addToCart } from "src/app/feature/cart/CartSlice";
 import { Button } from "@nextui-org/button";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const renderTab = (tab) => {
   switch (tab) {
@@ -69,6 +71,7 @@ export const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({ product, quantity }));
+    toast.success("Thêm hàng thành công!");
   };
 
   if (!product)

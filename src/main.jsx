@@ -25,6 +25,9 @@ import CategoryManagement from "./components/pages/AdminPage/CategoryManage";
 import PromotionManagement from "./components/pages/AdminPage/PromotionManage";
 import ViewOrder from "./components/pages/AdminPage/ViewOrder";
 import Dashboard from "./components/pages/AdminPage/Dashboard";
+import { MyPurchasePage } from "./components/pages/MyPurchasePage/MyPurchasePage";
+import { OrderDetailPage } from "./components/pages/OrderDetailPage/OrderDetailPage";
+import { ProfilePage } from "./components/pages/ProfilePage/ProfilePage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -49,6 +52,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           </Route>
           <Route path="cart" element={<CartPage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/user/purchase" element={<MyPurchasePage />} />
+          <Route path="/user/purchase/order/:orderId" element={<OrderDetailPage />} />
+          <Route path="/user/account/profile" element={<ProfilePage />} />
         </Route>
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/user-manage" element={<UserManage />} />

@@ -5,6 +5,8 @@ import { BannerPath } from "src/components";
 import { updateQuatity, removeFromCart } from "src/app/feature/cart/CartSlice";
 import { useNavigate } from "react-router-dom";
 import { axiosClient } from "src/axios/AxiosClient"; // Thêm axiosClient để gọi API
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const CartPage = () => {
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ export const CartPage = () => {
 
   const handleRemoveFromCart = (productId) => {
     dispatch(removeFromCart(productId));
+    toast.success("Xóa Hàng Thành Công!");
   };
 
   const renderCartRow = () => {
