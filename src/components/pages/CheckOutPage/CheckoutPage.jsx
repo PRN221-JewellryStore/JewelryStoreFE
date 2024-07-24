@@ -169,14 +169,14 @@ export const CheckoutPage = () => {
                   <div>
                     <p>Sản phẩm: {detail.product.name}</p>
                     <p>Số lượng: {detail.quantity}</p>
-                    <p>Giá: {detail.productCost}</p>
+                    <p>Giá: {detail.productCost.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                   </div>
                 </li>
               ))}
             </ul>
             <div style={{ textAlign: "left", marginTop: "20px" }}>
-              <p>Giá gốc: {orderDetails.primaryPrice}</p>
-              <p style={{ color: "red" }}>Giá được giảm: {orderDetails.total}</p>
+              <p>Giá gốc: {orderDetails.primaryPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+              <p style={{ color: "red" }}>Giá được giảm: {orderDetails.total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
               <Button color="primary" onClick={handlePayment}>
                 Thanh toán
               </Button>

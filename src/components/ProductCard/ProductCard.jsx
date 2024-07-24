@@ -20,6 +20,12 @@ export const ProductCard = ({ product }) => {
     toast.success("Thêm hàng thành công!");
   };
 
+  // Định dạng giá tiền VND
+  const formattedPrice = product.cost.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
   return (
     <Card className="border-0 mb-8 text-center cursor-pointer" onClick={goToDetailPage}>
       <div className="relative overflow-hidden group">
@@ -39,7 +45,7 @@ export const ProductCard = ({ product }) => {
         <h4 className="text-lg font-semibold">
           <a href="single-product.html" className="text-blue-600 hover:underline">{product.name}</a>
         </h4>
-        <p className="text-md font-medium">${product.cost}</p>
+        <p className="text-md font-medium">{formattedPrice}</p> {/* Hiển thị giá tiền đã định dạng */}
       </CardBody>
     </Card>
   );
