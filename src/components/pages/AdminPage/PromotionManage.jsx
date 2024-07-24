@@ -9,6 +9,7 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  CircularProgress,
   Input,
   Modal,
   ModalBody,
@@ -48,6 +49,7 @@ const PromotionManagement = () => {
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -80,6 +82,7 @@ const PromotionManagement = () => {
   const modalClose = () => {
     setIsEdit(false);
     setIsOpen(false);
+    setIsLoading(false);
     setDescription("");
     setCondition(0);
     setReduce(0);
@@ -89,16 +92,22 @@ const PromotionManagement = () => {
   };
 
   const handleAddPromotion = async () => {
+    setIsLoading(true);
     if (description == "") {
       setErr("Nhập mô tả");
+      setIsLoading(false);
     } else if (condition <= 0) {
       setErr("Điều kiện dùng phải lớn hơn 0");
+      setIsLoading(false);
     } else if (reduce <= 0) {
       setErr("Tỷ lệ giảm phải lớn hơn 0");
+      setIsLoading(false);
     } else if (max <= 0) {
       setErr("Số tiền giảm tối đa phải lớn hơn 0");
+      setIsLoading(false);
     } else if (expire == "") {
       setErr("Chọn thời gian hết hạn");
+      setIsLoading(false);
     } else {
       try {
         await createPromotion(description, condition, reduce, max, expire);
@@ -107,6 +116,7 @@ const PromotionManagement = () => {
         fetchData();
       } catch (error) {
         console.error("Lỗi:", error);
+        setIsLoading(false);
       }
     }
   };
@@ -114,14 +124,19 @@ const PromotionManagement = () => {
   const handleUpdatePromotion = async () => {
     if (description == "") {
       setErr("Nhập mô tả");
+      setIsLoading(false);
     } else if (condition <= 0) {
       setErr("Điều kiện dùng phải lớn hơn 0");
+      setIsLoading(false);
     } else if (reduce <= 0) {
       setErr("Tỷ lệ giảm phải lớn hơn 0");
+      setIsLoading(false);
     } else if (max <= 0) {
       setErr("Số tiền giảm tối đa phải lớn hơn 0");
+      setIsLoading(false);
     } else if (expire == "") {
       setErr("Chọn thời gian hết hạn");
+      setIsLoading(false);
     } else {
       try {
         await updatePromotion(id, description, condition, reduce, max, expire);
@@ -130,19 +145,23 @@ const PromotionManagement = () => {
         fetchData();
       } catch (error) {
         console.error("Lỗi:", error);
+        setIsLoading(false);
       }
     }
   };
 
   const handleRemovePromotion = async () => {
+    setIsLoading(true);
     try {
       await removePromotion(id);
       setMess("Đã xóa!!!");
       setId("");
+      setIsLoading(false);
       setIsConfirm(false);
       fetchData();
     } catch (error) {
       console.error("Lỗi:", error);
+      setIsLoading(false);
     }
   };
 
@@ -366,12 +385,16 @@ const PromotionManagement = () => {
               <Button color="danger" variant="light" onPress={modalClose}>
                 Close
               </Button>
-              <Button
-                color="success"
-                onPress={isEdit ? handleUpdatePromotion : handleAddPromotion}
-              >
-                {isEdit ? "Lưu" : "Tạo"}
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button
+                  color="success"
+                  onPress={isEdit ? handleUpdatePromotion : handleAddPromotion}
+                >
+                  {isEdit ? "Lưu" : "Tạo"}
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>
@@ -397,9 +420,13 @@ const PromotionManagement = () => {
               >
                 Không
               </Button>
-              <Button color="success" onPress={handleRemovePromotion}>
-                Có
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button color="success" onPress={handleRemovePromotion}>
+                  Có
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>

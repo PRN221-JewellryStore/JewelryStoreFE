@@ -8,6 +8,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  CircularProgress,
   Input,
   Modal,
   ModalBody,
@@ -44,6 +45,7 @@ const CategoryManagement = () => {
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const accountLoggedIn = useSelector((state) => state.account.loggedIn);
 
@@ -74,6 +76,7 @@ const CategoryManagement = () => {
   const modalClose = () => {
     setIsEdit(false);
     setIsOpen(false);
+    setIsLoading(false);
     setIsConfirm(false);
     setId(0);
     setName("");
@@ -81,6 +84,7 @@ const CategoryManagement = () => {
   };
 
   const handleAddCate = async () => {
+    setIsLoading(true);
     try {
       await createCategory(name);
       setMess("Thêm thành công !!!");
@@ -88,10 +92,12 @@ const CategoryManagement = () => {
       fetchData();
     } catch (error) {
       console.error("Error add cate:", error);
+      setIsLoading(false);
     }
   };
 
   const handleEditCate = async () => {
+    setIsLoading(true);
     try {
       await updateCategory(id, name);
       setMess("Đã lưu thông tin!!!");
@@ -99,10 +105,12 @@ const CategoryManagement = () => {
       fetchData();
     } catch (error) {
       console.error("Error edit cate:", error);
+      setIsLoading(false);
     }
   };
 
   const handleRemoveCate = async () => {
+    setIsLoading(true);
     try {
       await deleteCategory(id, accountLoggedIn.id);
       setMess("Đã xoa!!!");
@@ -110,6 +118,7 @@ const CategoryManagement = () => {
       fetchData();
     } catch (error) {
       console.error("Error remove cate:", error);
+      setIsLoading(false);
     }
   };
 
@@ -276,12 +285,16 @@ const CategoryManagement = () => {
               <Button color="danger" variant="light" onPress={modalClose}>
                 Close
               </Button>
-              <Button
-                color="success"
-                onPress={isEdit ? handleEditCate : handleAddCate}
-              >
-                {isEdit ? "Lưu" : "Tạo"}
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button
+                  color="success"
+                  onPress={isEdit ? handleEditCate : handleAddCate}
+                >
+                  {isEdit ? "Lưu" : "Tạo"}
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>
@@ -307,9 +320,13 @@ const CategoryManagement = () => {
               >
                 Không
               </Button>
-              <Button color="success" onPress={() => handleRemoveCate()}>
-                Có
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button color="success" onPress={() => handleRemoveCate()}>
+                  Có
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>

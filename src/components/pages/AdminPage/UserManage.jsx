@@ -9,6 +9,7 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  CircularProgress,
   Input,
   Modal,
   ModalBody,
@@ -24,6 +25,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  useScrollShadow,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { deleteUser, getAllUsers, updateUser } from "src/api/userApi";
@@ -48,16 +50,21 @@ const UserManage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await getAllUsers();
       setUsers([...response.value]);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsLoading(false);
     }
   };
 
@@ -88,6 +95,7 @@ const UserManage = () => {
   };
 
   const handleUpdateUser = async () => {
+    setIsLoading(true);
     try {
       await updateUser(
         selectedUser,
@@ -103,20 +111,25 @@ const UserManage = () => {
       setMess("Cập nhật thành công!!");
       modalClose();
       fetchData();
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi:", error);
+      setIsLoading(false);
     }
   };
 
   const handleDeleteUser = async () => {
+    setIsLoading(true);
     try {
       await deleteUser(selectedUser);
       setMess("Xóa thành công !!");
       setSelectedUser("");
       setIsConfirm(false);
       fetchData();
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi:", error);
+      setIsConfirm(false);
     }
   };
 
@@ -304,7 +317,7 @@ const UserManage = () => {
                     className="w-full p-4"
                   />
                   <Input
-                    isRequired
+                    disabled
                     type="email"
                     label="Email"
                     value={email}
@@ -350,9 +363,13 @@ const UserManage = () => {
               >
                 Đóng
               </Button>
-              <Button color="success" onPress={() => handleUpdateUser()}>
-                Lưu
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button color="success" onPress={() => handleUpdateUser()}>
+                  Lưu
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>
@@ -368,9 +385,7 @@ const UserManage = () => {
       >
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Delete User
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Xac nhan</ModalHeader>
             <ModalBody>
               <div className="w-full flex items-center justify-center">
                 <p className="text-4xl">Xóa người dùng?</p>
@@ -387,9 +402,13 @@ const UserManage = () => {
               >
                 Không
               </Button>
-              <Button color="success" onPress={() => handleDeleteUser()}>
-                Có
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button color="success" onPress={() => handleDeleteUser()}>
+                  Có
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>

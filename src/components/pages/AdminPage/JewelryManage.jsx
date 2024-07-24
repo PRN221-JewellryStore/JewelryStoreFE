@@ -8,6 +8,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  CircularProgress,
   Image,
   Input,
   Modal,
@@ -57,6 +58,7 @@ const JewelryManage = () => {
   const [search, setSearch] = useState("");
   const [img, setImg] = useState(null);
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -87,7 +89,8 @@ const JewelryManage = () => {
   // };
 
   const handleAddProduct = async () => {
-    if (description !== "" && cost > 0 && weight > 0 && quantity > 0) {
+    setIsLoading(true);
+    if (description !== "" && cost > 0 && weight > 0 && quantity > 0 && file) {
       try {
         await createProduct(
           Number(cost),
@@ -102,19 +105,29 @@ const JewelryManage = () => {
         setMess("Thêm thành công !!!");
         setIsOpen(false);
         fetchData();
+        setIsLoading(false);
       } catch (error) {
         console.error("Error add product:", error);
+        setIsLoading(false);
       }
     } else if (description === "") {
       setErr("Nhập mô tả");
+      setIsLoading(false);
     } else if (name === "") {
       setErr("Nhập tên trang sức");
+      setIsLoading(false);
     } else if (cost <= 0) {
       setErr("Đơn giá phải lớn hơn 0");
+      setIsLoading(false);
     } else if (weight <= 0) {
       setErr("Khối lượng phải lớn hơn 0");
+      setIsLoading(false);
     } else if (quantity <= 0) {
       setErr("Số lượng phải lớn hơn 0");
+      setIsLoading(false);
+    } else if (!file) {
+      setErr("Hay chon anh");
+      setIsLoading(false);
     }
   };
 
@@ -134,6 +147,7 @@ const JewelryManage = () => {
   const modalClose = () => {
     setIsEdit(false);
     setIsOpen(false);
+    setIsLoading(false);
     setSelectedProduct("");
     setCost(0);
     setQuantity(0);
@@ -147,7 +161,8 @@ const JewelryManage = () => {
   };
 
   const handleEditProduct = async () => {
-    if (description !== "" && cost > 0 && weight > 0 && quantity > 0) {
+    setIsLoading(true);
+    if (description !== "" && cost > 0 && weight > 0 && quantity > 0 && file) {
       try {
         await updateProduct(
           selectedProduct,
@@ -160,33 +175,46 @@ const JewelryManage = () => {
           file
         );
         setMess("Edit product successfully !!!");
+        setIsLoading(false);
         setIsOpen(false);
         fetchData();
       } catch (error) {
         console.error("Error edit product:", error);
+        setIsLoading(false);
       }
     } else if (description === "") {
       setErr("Nhập mô tả");
+      setIsLoading(false);
     } else if (name === "") {
       setErr("Nhập tên trang sức");
+      setIsLoading(false);
     } else if (cost <= 0) {
       setErr("Đơn giá phải lớn hơn 0");
+      setIsLoading(false);
     } else if (weight <= 0) {
       setErr("Khối lượng phải lớn hơn 0");
+      setIsLoading(false);
     } else if (quantity <= 0) {
       setErr("Số lượng phải lớn hơn 0");
+      setIsLoading(false);
+    } else if (!file) {
+      setErr("Hay chon anh");
+      setIsLoading(false);
     }
   };
 
   const handleDeleteProduct = async () => {
+    setIsLoading(true);
     try {
       await deleteProduct(selectedProduct);
       setMess("Remove product successfully !!!");
       setSelectedProduct("");
+      setIsLoading(false);
       setIsConfirm(false);
       fetchData();
     } catch (error) {
       console.error("Error delete product:", error);
+      setIsLoading(false);
     }
   };
 
@@ -556,14 +584,18 @@ const JewelryManage = () => {
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={modalClose}>
-                Close
+                Dong
               </Button>
-              <Button
-                color="success"
-                onPress={isEdit ? handleEditProduct : handleAddProduct}
-              >
-                {isEdit ? "Lưu" : "Thêm"}
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button
+                  color="success"
+                  onPress={isEdit ? handleEditProduct : handleAddProduct}
+                >
+                  {isEdit ? "Lưu" : "Thêm"}
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>
@@ -585,13 +617,18 @@ const JewelryManage = () => {
                 onPress={() => {
                   setIsConfirm(false);
                   setSelectedProduct({});
+                  setIsLoading(false);
                 }}
               >
                 Không
               </Button>
-              <Button color="success" onPress={() => handleDeleteProduct()}>
-                Có
-              </Button>
+              {isLoading ? (
+                <CircularProgress size="lg" aria-label="Loading..." />
+              ) : (
+                <Button color="success" onPress={() => handleDeleteProduct()}>
+                  Có
+                </Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>
