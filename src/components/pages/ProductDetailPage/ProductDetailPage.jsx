@@ -8,6 +8,8 @@ import { axiosClient } from "src/axios/AxiosClient";
 import { useDispatch } from "react-redux";
 import { addToCart } from "src/app/feature/cart/CartSlice";
 import { Button } from "@nextui-org/button";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const renderTab = (tab) => {
   switch (tab) {
@@ -18,29 +20,7 @@ const renderTab = (tab) => {
     default:
       return (
         <p>
-          Beryl Cook is one of Britain’s most talented and amusing artists.
-          Beryl’s pictures feature women of all shapes and sizes enjoying
-          themselves. Born between the two world wars, Beryl Cook eventually
-          left Kendrick School in Reading at the age of 15, where she went to
-          secretarial school and then into an insurance office. After moving to
-          London and then Hampton, she eventually married her next door
-          neighbour from Reading, John Cook. He was an officer in the Merchant
-          Navy and after he left the sea in 1956, they bought a pub for a year
-          before John took a job in Southern Rhodesia with a motor company.
-          Beryl bought their young son a box of watercolours, and when showing
-          him how to use it, she decided that she herself quite enjoyed
-          painting. John subsequently bought her a child’s painting set for her
-          birthday and it was with this that she produced her first significant
-          work, a half-length portrait of a dark-skinned lady with a vacant
-          expression and large drooping breasts. It was aptly named ‘Hangover’
-          by Beryl’s husband. It is often frustrating to attempt to plan meals
-          that are designed for one. Despite this fact, we are seeing more and
-          more recipe books and Internet websites that are dedicated to the act
-          of cooking for one. Divorce and the death of spouses or grown children
-          leaving for college are all reasons that someone accustomed to cooking
-          for more than one would suddenly need to learn how to adjust all the
-          cooking practices utilized before into a streamlined plan of cooking
-          that is more efficient for one person creating less.
+          {/* Nội dung mô tả sản phẩm */}
         </p>
       );
   }
@@ -69,6 +49,7 @@ export const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({ product, quantity }));
+    toast.success("Thêm hàng thành công!");
   };
 
   if (!product)
@@ -80,19 +61,25 @@ export const ProductDetailPage = () => {
       </h1>
     );
 
+  // Định dạng giá tiền VND
+  const formattedPrice = product.cost.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
   return (
     <div className="product-detail-page">
       <div className="container mx-auto py-16">
         <div className="flex flex-col lg:flex-row">
           <div className="w-full lg:w-1/2">
-            <img className="img-fluid" src={product.imgUrl} />
+            <img className="img-fluid" src={product.imgUrl} alt={product.name} />
           </div>
           <div className="w-full lg:w-1/2 mt-6 lg:mt-0 lg:pl-10">
             <h3 className="text-2xl font-medium text-gray-900 mb-4">
               {product.name}
             </h3>
             <h2 className="text-2xl font-bold text-blue-600 mb-2">
-              ${product.cost}
+              {formattedPrice}
             </h2>
             <ul className="mb-4">
               <li>
