@@ -48,13 +48,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="payment-success" element={<PaymentSuccess />} />
             <Route path="payment-fail" element={<PaymentFail />} />
-            <Route path="/payment-callback" element={<CallbackPage />} />
+            <Route path="payment-callback" element={<CallbackPage />} />
           </Route>
           <Route path="cart" element={<CartPage />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/user/purchase" element={<MyPurchasePage />} />
-          <Route path="/user/purchase/order/:orderId" element={<OrderDetailPage />} />
-          <Route path="/user/account/profile" element={<ProfilePage />} />
+          <Route path="user/purchase" element={<MyPurchasePage />} />
+          <Route path="user/purchase/order/:orderId" element={<OrderDetailPage />} />
+          <Route path="user/account/profile" element={<ProfilePage />} />
         </Route>
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/user-manage" element={<UserManage />} />
