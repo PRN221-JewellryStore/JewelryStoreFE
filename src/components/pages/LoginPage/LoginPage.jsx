@@ -27,7 +27,7 @@ export const LoginPage = () => {
       const { token, ...account } = response;
       localStorage.setItem("token", token); // Save token to localStorage if Remember Me is checked
       dispatch(setLoggedInAccount(account));
-
+      
       if (account.role === "Admin") {
         navigate("/admin");
       } else {
