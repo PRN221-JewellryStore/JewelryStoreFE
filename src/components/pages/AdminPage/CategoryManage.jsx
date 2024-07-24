@@ -1,4 +1,4 @@
-import { faAdd, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   BreadcrumbItem,
@@ -23,8 +23,10 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   createCategory,
+  deleteCategory,
   getAllCategories,
   updateCategory,
 } from "src/api/categoryApi";
@@ -42,6 +44,8 @@ const CategoryManagement = () => {
   const [page, setPage] = useState(1);
   const [err, setErr] = useState("");
   const [search, setSearch] = useState("");
+
+  const accountLoggedIn = useSelector((state) => state.account.loggedIn);
 
   useEffect(() => {
     fetchData();
@@ -70,6 +74,7 @@ const CategoryManagement = () => {
   const modalClose = () => {
     setIsEdit(false);
     setIsOpen(false);
+    setIsConfirm(false);
     setId(0);
     setName("");
     setErr("");
@@ -94,6 +99,17 @@ const CategoryManagement = () => {
       fetchData();
     } catch (error) {
       console.error("Error edit cate:", error);
+    }
+  };
+
+  const handleRemoveCate = async () => {
+    try {
+      await deleteCategory(id, accountLoggedIn.id);
+      setMess("Đã xoa!!!");
+      modalClose();
+      fetchData();
+    } catch (error) {
+      console.error("Error remove cate:", error);
     }
   };
 
@@ -186,7 +202,7 @@ const CategoryManagement = () => {
                                   className="text-white-500"
                                 />
                               </Button>
-                              {/* {cate.deletedAt == null && (
+                              {cate.deletedAt == null && (
                                 <Button
                                   className="w-1/6 bg-red-500 text-white"
                                   aria-label="remove"
@@ -200,7 +216,7 @@ const CategoryManagement = () => {
                                     className="text-white-500"
                                   />
                                 </Button>
-                              )} */}
+                              )}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -291,13 +307,7 @@ const CategoryManagement = () => {
               >
                 Không
               </Button>
-              <Button
-                color="success"
-                onPress={() => {
-                  setIsConfirm(false);
-                  setId(0);
-                }}
-              >
+              <Button color="success" onPress={() => handleRemoveCate()}>
                 Có
               </Button>
             </ModalFooter>
