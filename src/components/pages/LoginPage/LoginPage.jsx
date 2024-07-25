@@ -27,14 +27,13 @@ export const LoginPage = () => {
       const { token, ...account } = response;
       localStorage.setItem("token", token); // Save token to localStorage if Remember Me is checked
       dispatch(setLoggedInAccount(account));
-      
-      if (account.role === "Admin") {
+      if (response.role == "Admin") {
         navigate("/admin");
+        toast.success("Login success!");
       } else {
         navigate("/home");
+        toast.success("Login success!");
       }
-
-      toast.success("Login success!");
     } catch (error) {
       toast.error("Login failed!");
     }
