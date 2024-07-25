@@ -56,6 +56,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="user/purchase/order/:orderId" element={<OrderDetailPage />} />
           <Route path="user/account/profile" element={<ProfilePage />} />
         </Route>
+        
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/user-manage" element={<UserManage />} />
         <Route path="/admin/jewelry-manage" element={<JewelryManage />} />
