@@ -41,6 +41,7 @@ export const Header = () => {
 
   const menuItems = [
     { key: "account", label: "Account" },
+    { key: "mypurchase", label: "My Purchase" },
     { key: "logout", label: "Log Out" },
   ];
 
@@ -50,6 +51,16 @@ export const Header = () => {
 
   const handleMouseLeave = () => {
     setIsDropdownOpen(false);
+  };
+
+  const handleMenuItemClick = (key) => {
+    if (key === "logout") {
+      handleLogout();
+    } else if (key === "mypurchase") {
+      navigate("/user/purchase");
+    } else if (key === "account") {
+      navigate("/user/account/profile");
+    }
   };
 
   useEffect(() => {
@@ -141,15 +152,9 @@ export const Header = () => {
                               color={
                                 item.key === "logout" ? "danger" : "default"
                               }
-                              onClick={
-                                item.key === "logout" ? handleLogout : undefined
-                              }
+                              onClick={() => handleMenuItemClick(item.key)}
                             >
-                              <Link
-                                href={item.key === "account" ? "/account" : "#"}
-                              >
-                                {item.label}
-                              </Link>
+                              {item.label}
                             </DropdownItem>
                           ))}
                         </DropdownMenu>

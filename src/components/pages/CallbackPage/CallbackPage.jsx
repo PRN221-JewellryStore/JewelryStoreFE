@@ -6,14 +6,22 @@ import { axiosClient } from "src/axios/AxiosClient";
 export const CallbackPage = () => {
   const navigate = useNavigate();
   const emailFromStore = useSelector((state) => state.account.loggedIn.email);
+  const useridFromStore = useSelector((state) => state.account.loggedIn.id);
 
   useEffect(() => {
     const handleCallback = async () => {
       const queryParams = new URLSearchParams(window.location.search);
+      const userid = localStorage.getItem("userid") || useridFromStore; // Lấy userID từ localStorage
+
+      if (!userid) {
+        console.error("User ID not found in localStorage or Redux store");
+        navigate("/payment-fail");
+        return;
+      }
 
       try {
-        // Construct URL with query parameters
-        const url = `https://localhost:7000/api/VnPay/payment-callback?${queryParams.toString()}`;
+        // Construct URL with userID and query parameters
+        const url = `https://localhost:7000/api/VnPay/payment-callback?userid=${userid}&${queryParams.toString()}`;
 
         const response = await axiosClient.get(url);
         console.log(response);
@@ -43,7 +51,7 @@ export const CallbackPage = () => {
     };
 
     handleCallback();
-  }, [navigate, emailFromStore]);
+  }, [navigate, emailFromStore, useridFromStore]);
 
   return <p>Processing payment...</p>;
 };
