@@ -249,11 +249,11 @@ const UserManage = () => {
             <CardFooter>
               <Pagination
                 showControls
-                total={
+                total={Math.ceil(
                   users.filter((user) =>
                     user.fullName.toLowerCase().includes(search.toLowerCase())
                   ).length / 8
-                }
+                )}
                 initialPage={page}
                 onChange={(newPage) => setPage(newPage)}
               />

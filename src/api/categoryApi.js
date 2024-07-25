@@ -62,3 +62,16 @@ export const updateCategory = async (id, name) => {
     throw new CustomError(error.response.status, error.response.data.errors);
   }
 };
+
+export const deleteCategory = async (id, user) => {
+  try {
+    const response = await axios.delete(
+      `${baseUrl}/api/Category/Delete/${id}?userId=${user}`
+    );
+    if (response.status === 200) {
+      return response.status;
+    }
+  } catch (error) {
+    throw new CustomError(error.response.status, error.response.data.errors);
+  }
+};

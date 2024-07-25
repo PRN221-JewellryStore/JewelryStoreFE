@@ -27,14 +27,13 @@ export const LoginPage = () => {
       const { token, ...account } = response;
       localStorage.setItem("token", token); // Save token to localStorage if Remember Me is checked
       dispatch(setLoggedInAccount(account));
-
-      if (account.role === "Admin") {
+      if (response.role == "Admin") {
         navigate("/admin");
+        toast.success("Login success!");
       } else {
         navigate("/home");
+        toast.success("Login success!");
       }
-
-      toast.success("Login success!");
     } catch (error) {
       toast.error("Login failed!");
     }
@@ -92,7 +91,9 @@ export const LoginPage = () => {
               <Checkbox
                 id="rememberMe"
                 className="mr-1"
-                onChange={(e) => handleDataChange("isRemember", e.target.checked)}
+                onChange={(e) =>
+                  handleDataChange("isRemember", e.target.checked)
+                }
               />
               <label htmlFor="rememberMe" className="text-gray-700 mb-1">
                 Remember Me

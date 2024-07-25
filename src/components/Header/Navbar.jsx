@@ -1,43 +1,31 @@
-import { faSearch, faMessage, faBell } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Navbar,
   NavbarContent,
-  Input,
   Dropdown,
   DropdownTrigger,
   Avatar,
   DropdownMenu,
   DropdownItem,
-  Link,
 } from "@nextui-org/react";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "src/app/feature/account/AccountSlice";
 
 const NavBar = () => {
-  const [search, setSearch] = React.useState("");
+  const accountLoggedIn = useSelector((state) => state.account.loggedIn);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <Navbar className="border-b border-solid border-black">
-      <NavbarContent className="hidden sm:flex gap-4 w-1/2" justify="center">
-        <div className="relative w-full">
-          <Input
-            placeholder="Type to search..."
-            size="sm"
-            className="border-gray-300 px-2 py-1 focus:outline-none"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none">
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </div>
-      </NavbarContent>
-
       <NavbarContent
         as="div"
         justify="end"
         className="flex items-center space-x-4"
       >
-        <Dropdown>
+        {/* <Dropdown>
           <DropdownTrigger>
             <FontAwesomeIcon icon={faBell} className="text-gray-500" />
           </DropdownTrigger>
@@ -114,7 +102,7 @@ const NavBar = () => {
               </Link>
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
         <Dropdown>
           <DropdownTrigger>
             <Avatar
@@ -129,13 +117,22 @@ const NavBar = () => {
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="welcome" className="h-14 gap-2">
-              <p className="font-semibold">Welcome, Hiệp</p>
-            </DropdownItem>
-            <DropdownItem key="profile">
-              <Link href="#">Edit Profile</Link>
+              <p className="font-semibold">
+                Welcome, {accountLoggedIn.username}
+              </p>
             </DropdownItem>
             <DropdownItem key="logout" color="danger">
-              <Link href="#">Log Out</Link>
+              <div
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  dispatch(logout());
+                  navigate("/home");
+                }}
+              >
+                <FontAwesomeIcon icon={faSignOut} className="text-gray-500" />{" "}
+                {"   "}
+                Log Out
+              </div>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

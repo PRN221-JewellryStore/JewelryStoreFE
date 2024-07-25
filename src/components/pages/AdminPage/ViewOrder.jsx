@@ -135,7 +135,13 @@ const ViewOrder = () => {
                     </CardBody>
                     <CardFooter className="text-small justify-center">
                       <Chip
-                        color={order.status == "Done" ? "success" : "danger"}
+                        color={
+                          order.status == "Done"
+                            ? "success"
+                            : status == "Pending"
+                            ? "primary"
+                            : "danger"
+                        }
                         size="lg"
                       >
                         {order.status}
@@ -212,7 +218,18 @@ const ViewOrder = () => {
                 </div>
                 <p className="w-full text-xl">
                   <span className="text-xl font-bold">Trạng thái:</span>{" "}
-                  {status}
+                  <Chip
+                    color={
+                      status == "Done"
+                        ? "success"
+                        : status == "Pending"
+                        ? "primary"
+                        : "danger"
+                    }
+                    size="lg"
+                  >
+                    {status}
+                  </Chip>
                 </p>
                 <p className="w-full text-2xl font-bold text-center">
                   Chi tiết đơn hàng
