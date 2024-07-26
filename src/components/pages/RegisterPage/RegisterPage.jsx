@@ -21,7 +21,7 @@ const RegisterPage = () => {
     email: "",
     phoneNumber: "",
     address: "",
-    roleID: "",
+    // roleID removed from form data state
     agreeTerms: false,
   });
 
@@ -40,7 +40,7 @@ const RegisterPage = () => {
       email,
       phoneNumber,
       address,
-      roleID,
+      // roleID removed from destructured variables
       agreeTerms,
     } = formData;
 
@@ -51,8 +51,7 @@ const RegisterPage = () => {
       !fullName ||
       !email ||
       !phoneNumber ||
-      !address ||
-      !roleID
+      !address
     ) {
       toast.error("Please fill out all required fields");
       return;
@@ -75,13 +74,13 @@ const RegisterPage = () => {
       email,
       phoneNumber,
       address,
-      roleID,
+      roleID: "2", // Fixed role ID set here
     };
 
     try {
       await axiosClient.post("/User/register", payload);
       toast.success("Register success!");
-      navigate("/home");
+      navigate("/login");
     } catch (error) {
       if (error.response && error.response.status === 400) { 
         toast.error("Email already exists. Please use a different email.");
@@ -204,18 +203,7 @@ const RegisterPage = () => {
                 className="pl-10 p-2 border rounded-full w-full shadow"
               />
             </div>
-            <div className="relative w-full max-w-sm mb-5">
-              <FontAwesomeIcon
-                icon={faUser}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"
-              />
-              <input
-                type="number"
-                placeholder="Role ID"
-                onChange={(e) => handleDataChange("roleID", e.target.value)}
-                className="pl-10 p-2 border rounded-full w-full shadow"
-              />
-            </div>
+            {/* Role ID input removed */}
             <div className="relative w-full max-w-sm mb-4 ml-8 flex items-center">
               <input
                 type="checkbox"
